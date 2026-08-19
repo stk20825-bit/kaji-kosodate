@@ -440,6 +440,13 @@ onclick="addSchedule()">
 <div class="card">
 
 <h2>🛒 買い物リスト</h2>
+<hr>
+<h3>⚡ よく買うもの</h3>
+<div class="quick-shopping">
+    <button onclick="quickAddShopping('牛乳')">🥛 牛乳</button>
+    <button onclick="quickAddShopping('バナナ')">🍌 バナナ</button>
+    <button onclick="quickAddShopping('ヨーグルト')">🥛 ヨーグルト</button>
+</div>
 
 <div id="shoppingList"></div>
 
@@ -1849,6 +1856,15 @@ function searchRecipe() {
     window.open("https://www.google.com/search?q=" + encodeURIComponent(keyword + " レシピ"), "_blank");
 }
 
+function quickAddShopping(name) {
+    shopping.push({
+        id: Date.now(),
+        text: name,
+        done: false
+    });
+    save();
+    render();
+}
 </script>
 
 </body>

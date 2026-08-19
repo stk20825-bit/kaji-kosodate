@@ -2,1871 +2,1096 @@
 <html lang="ja">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>わが家の家事・育児</title>
 
-<meta charset="UTF-8">
+    <style>
+        /* =========================
+           基本設定
+        ========================= */
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+        * {
+            box-sizing: border-box;
+        }
 
-<title>わが家の家事・育児</title>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #f5f6f8;
+            color: #333;
+        }
 
-<style>
+        header {
+            background: white;
+            padding: 18px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid #ddd;
+        }
 
-* {
-    box-sizing: border-box;
-}
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
 
-body {
-    margin: 0;
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-    background: #f5f6f8;
-    color: #333;
-}
+        header p {
+            margin: 5px 0 0;
+            color: #777;
+            font-size: 13px;
+        }
 
-header {
-    background: white;
-    padding: 18px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    border-bottom: 1px solid #ddd;
-}
+        .container {
+            max-width: 750px;
+            margin: auto;
+            padding: 15px;
+        }
 
-header h1 {
-    margin: 0;
-    font-size: 22px;
-}
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
 
-header p {
-    margin: 5px 0 0;
-    color: #777;
-    font-size: 13px;
-}
+        .card h2 {
+            margin-top: 0;
+            font-size: 19px;
+        }
 
-.container {
-    max-width: 750px;
-    margin: auto;
-    padding: 15px;
-}
+        /* =========================
+           入力・ボタン
+        ========================= */
 
-.card {
-    background: white;
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
 
-.card h2 {
-    margin-top: 0;
-    font-size: 19px;
-}
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
 
-input,
-select {
-    width: 100%;
-    padding: 11px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    font-size: 16px;
-}
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 15px;
+        }
 
-button {
-    border: none;
-    border-radius: 8px;
-    padding: 10px 14px;
-    cursor: pointer;
-    font-size: 15px;
-}
+        .add {
+            background: #222;
+            color: white;
+            width: 100%;
+        }
 
-.add {
-    background: #222;
-    color: white;
-    width: 100%;
-}
+        .delete {
+            background: #eee;
+            color: #c00;
+        }
 
-.voice {
-    background: #eee;
-    min-width: 55px;
-    margin-bottom: 8px;
-}
+        .undecided {
+            background: #fff0c2;
+            color: #6b5000;
+            width: 100%;
+            margin-bottom: 8px;
+        }
 
-.voice.listening {
-    background: #ffdddd;
-}
+        /* =========================
+           リスト
+        ========================= */
 
-.undecided {
-    background: #fff0c2;
-    color: #6b5000;
-    width: 100%;
-    margin-bottom: 8px;
-}
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
 
-.delete {
-    background: #eee;
-    color: #c00;
-}
+        .item:last-child {
+            border-bottom: none;
+        }
 
-.row {
-    display: flex;
-    gap: 8px;
-}
+        .item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+        }
 
-.row > * {
-    flex: 1;
-}
+        .item-content {
+            flex: 1;
+        }
 
-.input-with-voice {
-    display: flex;
-    gap: 6px;
-}
+        .item-title {
+            font-weight: bold;
+        }
 
-.input-with-voice input {
-    flex: 1;
-}
+        .item-detail {
+            font-size: 13px;
+            color: #777;
+            margin-top: 3px;
+        }
 
-.item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
-}
+        .done {
+            text-decoration: line-through;
+            color: #999;
+        }
 
-.item:last-child {
-    border-bottom: none;
-}
+        /* =========================
+           予定
+        ========================= */
 
-.item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    margin: 0;
-}
+        .today {
+            background: #fff8df;
+            border-left: 5px solid #e5b700;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
 
-.item-content {
-    flex: 1;
-}
+        .undecided-box {
+            background: #f4f0ff;
+            border-left: 5px solid #8064a2;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
 
-.item-title {
-    font-weight: bold;
-}
+        .date-title {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
 
-.item-detail {
-    font-size: 13px;
-    color: #777;
-    margin-top: 3px;
-}
+        /* =========================
+           今日の状況
+        ========================= */
 
-.done {
-    text-decoration: line-through;
-    color: #999;
-}
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
 
-.today {
-    background: #fff8df;
-    border-left: 5px solid #e5b700;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
+        .summary-box {
+            background: #f1f2f5;
+            padding: 12px;
+            text-align: center;
+            border-radius: 10px;
+        }
 
-.undecided-box {
-    background: #f4f0ff;
-    border-left: 5px solid #8064a2;
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
+        .summary-number {
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-.date-title {
-    font-weight: bold;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    font-size: 16px;
-}
+        /* =========================
+           買い物
+        ========================= */
 
-.summary {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-}
+        .quick-shopping {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
 
-.summary-box {
-    background: #f1f2f5;
-    padding: 12px;
-    text-align: center;
-    border-radius: 10px;
-}
+        .quick-shopping button {
+            background: #f1f2f5;
+        }
 
-.summary-number {
-    font-size: 22px;
-    font-weight: bold;
-}
+        /* =========================
+           家族メモ
+        ========================= */
 
-.empty {
-    color: #999;
-    text-align: center;
-    padding: 15px;
-}
+        .family-memo {
+            background: #fffdf0;
+            border-left: 5px solid #e5b700;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
 
-.recipe {
-    color: #333;
-    text-decoration: none;
-    font-size: 14px;
-}
+        .memo-text {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
 
-@media(max-width:500px) {
+        /* =========================
+           その他
+        ========================= */
 
-    .container {
-        padding: 10px;
-    }
+        .empty {
+            color: #999;
+            text-align: center;
+            padding: 15px;
+        }
 
-    .card {
-        padding: 15px;
-    }
+        .recipe {
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+        }
 
-    .row {
-        flex-direction: column;
-        gap: 0;
-    }
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 18px 0;
+        }
 
-}
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
 
-</style>
+        /* =========================
+           スマホ表示
+        ========================= */
 
+        @media (max-width: 500px) {
+            .container {
+                padding: 10px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .summary {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .quick-shopping {
+                grid-template-columns: 1fr;
+            }
+
+            .item {
+                gap: 8px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
+    <!-- =========================
+         ヘッダー
+    ========================= -->
+
+    <header>
+        <h1>🏠 わが家の家事・育児</h1>
+        <p>家族で予定・家事・買い物・ご飯を共有</p>
+    </header>
 
-<h1>🏠 わが家の家事・育児</h1>
+    <div class="container">
+
+        <!-- =========================
+             今日の状況
+        ========================= -->
 
-<p>
-家族で予定・家事・買い物・ご飯を共有
-</p>
+        <div class="card">
+            <h2>📊 今日の状況</h2>
 
-</header>
+            <div class="summary">
+                <div class="summary-box">
+                    <div class="summary-number" id="todayCount">0</div>
+                    <div>今日の予定</div>
+                </div>
 
-<div class="container">
+                <div class="summary-box">
+                    <div class="summary-number" id="shoppingCount">0</div>
+                    <div>買い物</div>
+                </div>
 
-<!-- 今日の状況 -->
+                <div class="summary-box">
+                    <div class="summary-number" id="houseCount">0</div>
+                    <div>家事</div>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
+        <!-- =========================
+             今日の予定
+        ========================= -->
 
-<h2>📊 今日の状況</h2>
+        <div class="card">
+            <h2>⭐ 今日の予定</h2>
+            <div id="todaySchedule"></div>
+        </div>
 
-<div class="summary">
+        <!-- =========================
+             予定登録
+        ========================= -->
 
-<div class="summary-box">
+        <div class="card">
+            <h2>📅 予定を登録</h2>
 
-<div
-class="summary-number"
-id="todayCount">
+            <label for="scheduleDate">日付</label>
+            <input type="date" id="scheduleDate">
 
-0
+            <label for="scheduleTime">時刻</label>
+            <input type="time" id="scheduleTime">
 
-</div>
+            <button class="undecided" onclick="toggleUndecided()">❓ 日時未定</button>
 
-<div>
-今日の予定
-</div>
+            <div id="dateTimeMessage" style="font-size:13px;color:#777;margin-bottom:10px;">
+                日時を指定して登録できます
+            </div>
 
-</div>
+            <label for="scheduleText">予定内容</label>
+            <input type="text" id="scheduleText" placeholder="例：保育園お迎え">
 
-<div class="summary-box">
+            <label for="schedulePerson">担当</label>
+            <select id="schedulePerson">
+                <option>パパ</option>
+                <option>ママ</option>
+                <option>家族</option>
+            </select>
 
-<div
-class="summary-number"
-id="shoppingCount">
+            <button class="add" onclick="addSchedule()">＋ 予定を登録</button>
+        </div>
 
-0
+        <!-- =========================
+             日時未定
+        ========================= -->
 
-</div>
+        <div class="card">
+            <h2>📌 日時未定</h2>
+            <div id="undecidedSchedule"></div>
+        </div>
 
-<div>
-買い物
-</div>
+        <!-- =========================
+             今後の予定
+        ========================= -->
 
-</div>
+        <div class="card">
+            <h2>📆 今後の予定</h2>
+            <div id="futureSchedule"></div>
+        </div>
 
-<div class="summary-box">
+        <!-- =========================
+             買い物
+        ========================= -->
 
-<div
-class="summary-number"
-id="houseCount">
+        <div class="card">
+            <h2>🛒 買い物リスト</h2>
 
-0
+            <hr>
 
-</div>
+            <h3>⚡ よく買うもの</h3>
 
-<div>
-家事
-</div>
+            <div class="quick-shopping">
+                <button onclick="quickAddShopping('牛乳')">🥛 牛乳</button>
+                <button onclick="quickAddShopping('バナナ')">🍌 バナナ</button>
+                <button onclick="quickAddShopping('ヨーグルト')">🥛 ヨーグルト</button>
+            </div>
 
-</div>
+            <div id="shoppingList"></div>
 
-</div>
+            <hr>
 
-</div>
+            <input id="shoppingText" placeholder="例：牛乳">
 
+            <button class="add" onclick="addShopping()">＋ 買い物を追加</button>
+        </div>
 
-<!-- 今日の予定 -->
+        <!-- =========================
+             家事
+        ========================= -->
 
-<div class="card">
+        <div class="card">
+            <h2>🧹 家事ルーティン</h2>
 
-<h2>⭐ 今日の予定</h2>
+            <div id="houseList"></div>
 
-<div id="todaySchedule"></div>
+            <hr>
 
-</div>
+            <input id="houseText" placeholder="例：洗濯">
 
+            <select id="housePerson">
+                <option>パパ</option>
+                <option>ママ</option>
+                <option>家族</option>
+            </select>
 
-<!-- 予定登録 -->
+            <button class="add" onclick="addHouse()">＋ 家事を追加</button>
+        </div>
 
-<div class="card">
+        <!-- =========================
+             ご飯
+        ========================= -->
 
-<h2>📅 予定を登録</h2>
+        <div class="card">
+            <h2>🍚 ご飯リスト</h2>
 
-<label>
-日付
-</label>
+            <div id="mealList"></div>
 
-<input
-type="date"
-id="scheduleDate"
->
+            <hr>
 
+            <label for="mealText">料理名</label>
+            <input id="mealText" placeholder="例：カレー">
 
-<label>
-時刻
-</label>
+            <label for="mealUrl">参考レシピURL</label>
+            <input id="mealUrl" placeholder="https://...">
 
-<input
-type="time"
-id="scheduleTime"
->
+            <button class="add" onclick="addMeal()">＋ ご飯を追加</button>
 
+            <hr>
 
-<button
-class="undecided"
-onclick="toggleUndecided()">
+            <h3>🔎 レシピを検索</h3>
 
-❓ 日時未定
-</button>
-<div id="dateTimeMessage" style="font-size:13px;color:#777;margin-bottom:10px;">
-日時を指定して登録できます
-</div>
+            <input id="recipeSearch" placeholder="例：鶏むね肉 キャベツ">
 
+            <button class="add" onclick="searchRecipe()">🔎 Googleで検索</button>
+        </div>
 
-<label>
-予定内容
-</label>
+        <!-- =========================
+             家族メモ
+        ========================= -->
 
-<div class="input-with-voice">
+        <div class="card">
+            <h2>📝 家族メモ</h2>
 
-<input
-type="text"
-id="scheduleText"
-placeholder="例：保育園お迎え"
->
+            <textarea id="familyMemoText" placeholder="家族で共有したいことを入力してください"></textarea>
 
-<button
-class="voice"
-onclick="startVoice('scheduleText',this)">
+            <button class="add" onclick="addFamilyMemo()">＋ メモを追加</button>
 
-🎤
+            <hr>
 
-</button>
+            <div id="familyMemoList"></div>
+        </div>
 
-</div>
+    </div>
 
+    <script>
+        /* =========================
+           データ
+        ========================= */
 
-<label>
-担当
-</label>
+        let schedules = JSON.parse(localStorage.getItem("schedules") || "[]");
+        let shopping = JSON.parse(localStorage.getItem("shopping") || "[]");
+        let house = JSON.parse(localStorage.getItem("house") || "[]");
+        let meals = JSON.parse(localStorage.getItem("meals") || "[]");
+        let familyMemos = JSON.parse(localStorage.getItem("familyMemos") || "[]");
 
-<select id="schedulePerson">
+        /* =========================
+           保存
+        ========================= */
 
-<option>パパ</option>
+        function save() {
+            localStorage.setItem("schedules", JSON.stringify(schedules));
+            localStorage.setItem("shopping", JSON.stringify(shopping));
+            localStorage.setItem("house", JSON.stringify(house));
+            localStorage.setItem("meals", JSON.stringify(meals));
+            localStorage.setItem("familyMemos", JSON.stringify(familyMemos));
+        }
 
-<option>ママ</option>
+        /* =========================
+           今日の日付取得
+        ========================= */
 
-<option>家族</option>
+        function getToday() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const day = String(now.getDate()).padStart(2, "0");
 
-</select>
+            return `${year}-${month}-${day}`;
+        }
 
+        /* =========================
+           日付表示
+        ========================= */
 
-<button
-class="add"
-onclick="addSchedule()">
+        function formatDate(date) {
+            const d = new Date(date + "T00:00:00");
+            return `${d.getMonth() + 1}月${d.getDate()}日`;
+        }
 
-＋ 予定を登録
+        /* =========================
+           日時未定切替
+        ========================= */
 
-</button>
+        let isUndecided = false;
 
-</div>
+        function toggleUndecided() {
+            isUndecided = !isUndecided;
 
+            const date = document.getElementById("scheduleDate");
+            const time = document.getElementById("scheduleTime");
+            const message = document.getElementById("dateTimeMessage");
 
-<!-- 日時未定 -->
+            if (isUndecided) {
+                date.disabled = true;
+                time.disabled = true;
+                date.value = "";
+                time.value = "";
+                message.textContent = "❓ 日時未定として登録します";
+            } else {
+                date.disabled = false;
+                time.disabled = false;
+                message.textContent = "日時を指定して登録できます";
+                setDefaultDateTime();
+            }
+        }
 
-<div class="card">
+        /* =========================
+           デフォルト日時
+        ========================= */
 
-<h2>📌 日時未定</h2>
+        function setDefaultDateTime() {
+            const now = new Date();
 
-<div id="undecidedSchedule"></div>
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const day = String(now.getDate()).padStart(2, "0");
+            const hours = String(now.getHours()).padStart(2, "0");
+            const minutes = String(now.getMinutes()).padStart(2, "0");
 
-</div>
+            document.getElementById("scheduleDate").value = `${year}-${month}-${day}`;
+            document.getElementById("scheduleTime").value = `${hours}:${minutes}`;
+        }
 
+        /* =========================
+           予定追加
+        ========================= */
 
-<!-- 今後の予定 -->
+        function addSchedule() {
+            const date = document.getElementById("scheduleDate").value;
+            const time = document.getElementById("scheduleTime").value;
+            const text = document.getElementById("scheduleText").value.trim();
+            const person = document.getElementById("schedulePerson").value;
 
-<div class="card">
+            if (!text) {
+                alert("予定内容を入力してください");
+                return;
+            }
 
-<h2>📆 今後の予定</h2>
+            if (!isUndecided && !date) {
+                alert("日付を入力するか、「日時未定」を選択してください");
+                return;
+            }
 
-<div id="futureSchedule"></div>
+            schedules.push({
+                id: Date.now(),
+                date: isUndecided ? null : date,
+                time: isUndecided ? null : time,
+                text: text,
+                person: person,
+                done: false
+            });
 
-</div>
+            document.getElementById("scheduleText").value = "";
 
+            if (!isUndecided) {
+                setDefaultDateTime();
+            }
 
-<!-- 買い物 -->
+            save();
+            render();
+        }
 
-<div class="card">
+        /* =========================
+           買い物追加
+        ========================= */
 
-<h2>🛒 買い物リスト</h2>
-<hr>
-<h3>⚡ よく買うもの</h3>
-<div class="quick-shopping">
-    <button onclick="quickAddShopping('牛乳')">🥛 牛乳</button>
-    <button onclick="quickAddShopping('バナナ')">🍌 バナナ</button>
-    <button onclick="quickAddShopping('ヨーグルト')">🥛 ヨーグルト</button>
-</div>
+        function addShopping() {
+            const text = document.getElementById("shoppingText").value.trim();
 
-<div id="shoppingList"></div>
+            if (!text) return;
 
-<hr>
+            shopping.push({
+                id: Date.now(),
+                text: text,
+                done: false
+            });
 
-<div class="input-with-voice">
+            document.getElementById("shoppingText").value = "";
 
-<input
-id="shoppingText"
-placeholder="例：牛乳"
->
+            save();
+            render();
+        }
 
-<button
-class="voice"
-onclick="startVoice('shoppingText',this)">
+        /* =========================
+           よく買うもの追加
+        ========================= */
 
-🎤
+        function quickAddShopping(name) {
+            shopping.push({
+                id: Date.now(),
+                text: name,
+                done: false
+            });
 
-</button>
+            save();
+            render();
+        }
 
-</div>
+        /* =========================
+           家事追加
+        ========================= */
 
-<button
-class="add"
-onclick="addShopping()">
+        function addHouse() {
+            const text = document.getElementById("houseText").value.trim();
+            const person = document.getElementById("housePerson").value;
 
-＋ 買い物を追加
+            if (!text) return;
 
-</button>
+            house.push({
+                id: Date.now(),
+                text: text,
+                person: person,
+                done: false
+            });
 
-</div>
+            document.getElementById("houseText").value = "";
 
+            save();
+            render();
+        }
 
-<!-- 家事 -->
+        /* =========================
+           ご飯追加
+        ========================= */
 
-<div class="card">
+        function addMeal() {
+            const text = document.getElementById("mealText").value.trim();
+            const url = document.getElementById("mealUrl").value.trim();
 
-<h2>🧹 家事ルーティン</h2>
+            if (!text) {
+                alert("料理名を入力してください");
+                return;
+            }
 
-<div id="houseList"></div>
+            meals.push({
+                id: Date.now(),
+                text: text,
+                url: url
+            });
 
-<hr>
+            document.getElementById("mealText").value = "";
+            document.getElementById("mealUrl").value = "";
 
-<div class="input-with-voice">
+            save();
+            render();
+        }
 
-<input
-id="houseText"
-placeholder="例：洗濯"
->
+        /* =========================
+           家族メモ追加
+        ========================= */
 
-<button
-class="voice"
-onclick="startVoice('houseText',this)">
+        function addFamilyMemo() {
+            const text = document.getElementById("familyMemoText").value.trim();
 
-🎤
+            if (!text) {
+                alert("メモを入力してください");
+                return;
+            }
 
-</button>
+            familyMemos.push({
+                id: Date.now(),
+                text: text
+            });
 
-</div>
+            document.getElementById("familyMemoText").value = "";
 
-<select id="housePerson">
+            save();
+            render();
+        }
 
-<option>パパ</option>
+        /* =========================
+           完了切替
+        ========================= */
 
-<option>ママ</option>
+        function toggle(type, id) {
+            let list;
 
-<option>家族</option>
+            if (type === "schedule") list = schedules;
+            if (type === "shopping") list = shopping;
+            if (type === "house") list = house;
 
-</select>
+            const item = list.find(x => x.id === id);
 
-<button
-class="add"
-onclick="addHouse()">
+            if (item) {
+                item.done = !item.done;
+            }
 
-＋ 家事を追加
+            save();
+            render();
+        }
 
-</button>
+        /* =========================
+           予定削除
+        ========================= */
 
-</div>
+        function deleteSchedule(id) {
+            if (!confirm("この予定を削除しますか？")) return;
 
+            schedules = schedules.filter(x => x.id !== id);
 
-<!-- ご飯 -->
+            save();
+            render();
+        }
 
-<div class="card">
+        /* =========================
+           買い物削除
+        ========================= */
 
-<h2>🍚 ご飯リスト</h2>
+        function deleteShopping(id) {
+            if (!confirm("この商品を削除しますか？")) return;
 
-<div id="mealList"></div>
+            shopping = shopping.filter(x => x.id !== id);
 
-<hr>
+            save();
+            render();
+        }
 
-<label>
-料理名
-</label>
+        /* =========================
+           家事削除
+        ========================= */
 
-<div class="input-with-voice">
+        function deleteHouse(id) {
+            if (!confirm("この家事を削除しますか？")) return;
 
-<input
-id="mealText"
-placeholder="例：カレー"
->
+            house = house.filter(x => x.id !== id);
 
-<button
-class="voice"
-onclick="startVoice('mealText',this)">
+            save();
+            render();
+        }
 
-🎤
+        /* =========================
+           ご飯削除
+        ========================= */
 
-</button>
+        function deleteMeal(id) {
+            if (!confirm("この料理を削除しますか？")) return;
 
-</div>
+            meals = meals.filter(x => x.id !== id);
 
-<label>
-参考レシピURL
-</label>
+            save();
+            render();
+        }
 
-<input
-id="mealUrl"
-placeholder="https://..."
->
+        /* =========================
+           家族メモ削除
+        ========================= */
 
-<button
-class="add"
-onclick="addMeal()">
-＋ ご飯を追加
-</button>
+        function deleteFamilyMemo(id) {
+            if (!confirm("このメモを削除しますか？")) return;
 
-<hr>
-<h3>🔎 レシピを検索</h3>
-<div class="input-with-voice">
-    <input id="recipeSearch" placeholder="例：鶏むね肉 キャベツ">
-    <button class="voice" onclick="startVoice('recipeSearch',this)">🎤</button>
-</div>
-<button class="add" onclick="searchRecipe()">🔎 Googleで検索</button>
-    
-</div>
+            familyMemos = familyMemos.filter(x => x.id !== id);
 
-</div>
+            save();
+            render();
+        }
 
+        /* =========================
+           予定表示
+        ========================= */
 
-<script>
+        function renderSchedules() {
+            const today = getToday();
 
-/* =========================
-   データ
-========================= */
+            /* 今日 */
+            const todayList = schedules
+                .filter(x => x.date === today)
+                .sort((a, b) => (a.time || "").localeCompare(b.time || ""));
 
-let schedules =
-JSON.parse(
-localStorage.getItem("schedules") || "[]"
-);
+            const todayArea = document.getElementById("todaySchedule");
 
-let shopping =
-JSON.parse(
-localStorage.getItem("shopping") || "[]"
-);
+            if (todayList.length === 0) {
+                todayArea.innerHTML = '<div class="empty">今日の予定はありません</div>';
+            } else {
+                todayArea.innerHTML = todayList.map(x => `
+                    <div class="today">
+                        <div class="item">
+                            <input type="checkbox" ${x.done ? "checked" : ""}
+                                onclick="toggle('schedule', ${x.id})">
 
-let house =
-JSON.parse(
-localStorage.getItem("house") || "[]"
-);
+                            <div class="item-content">
+                                <div class="${x.done ? "done" : ""}">
+                                    ${x.time || ""}　${x.text}
+                                </div>
 
-let meals =
-JSON.parse(
-localStorage.getItem("meals") || "[]"
-);
+                                <div class="item-detail">
+                                    担当：${x.person}
+                                </div>
+                            </div>
 
+                            <button class="delete" onclick="deleteSchedule(${x.id})">削除</button>
+                        </div>
+                    </div>
+                `).join("");
+            }
 
-/* =========================
-   保存
-========================= */
+            /* 日時未定 */
+            const undecided = schedules.filter(x => !x.date);
+            const undecidedArea = document.getElementById("undecidedSchedule");
 
-function save() {
+            if (undecided.length === 0) {
+                undecidedArea.innerHTML = '<div class="empty">日時未定の予定はありません</div>';
+            } else {
+                undecidedArea.innerHTML = undecided.map(x => `
+                    <div class="undecided-box">
+                        <div class="item">
+                            <input type="checkbox" ${x.done ? "checked" : ""}
+                                onclick="toggle('schedule', ${x.id})">
 
-localStorage.setItem(
-"schedules",
-JSON.stringify(schedules)
-);
+                            <div class="item-content">
+                                <div class="${x.done ? "done" : ""}">
+                                    ❓ ${x.text}
+                                </div>
 
-localStorage.setItem(
-"shopping",
-JSON.stringify(shopping)
-);
+                                <div class="item-detail">
+                                    担当：${x.person}
+                                </div>
+                            </div>
 
-localStorage.setItem(
-"house",
-JSON.stringify(house)
-);
+                            <button class="delete" onclick="deleteSchedule(${x.id})">削除</button>
+                        </div>
+                    </div>
+                `).join("");
+            }
 
-localStorage.setItem(
-"meals",
-JSON.stringify(meals)
-);
+            /* 今後 */
+            const futureList = schedules
+                .filter(x => x.date && x.date > today)
+                .sort((a, b) => {
+                    const aDate = a.date + " " + (a.time || "");
+                    const bDate = b.date + " " + (b.time || "");
+                    return aDate.localeCompare(bDate);
+                });
 
-}
+            const futureArea = document.getElementById("futureSchedule");
 
+            if (futureList.length === 0) {
+                futureArea.innerHTML = '<div class="empty">今後の予定はありません</div>';
+            } else {
+                let currentDate = "";
 
-/* =========================
-   今日
-========================= */
+                futureArea.innerHTML = futureList.map(x => {
+                    let title = "";
 
-function getToday() {
+                    if (x.date !== currentDate) {
+                        currentDate = x.date;
+                        title = `<div class="date-title">📅 ${formatDate(x.date)}</div>`;
+                    }
 
-const now = new Date();
+                    return `
+                        ${title}
 
-const year =
-now.getFullYear();
-
-const month =
-String(now.getMonth() + 1)
-.padStart(2,"0");
-
-const day =
-String(now.getDate())
-.padStart(2,"0");
-
-return `${year}-${month}-${day}`;
-
-}
-
-
-/* =========================
-   日付表示
-========================= */
-
-function formatDate(date) {
-
-const d =
-new Date(date + "T00:00:00");
-
-return (
-d.getMonth() + 1
-)
-+
-"月"
-+
-d.getDate()
-+
-"日";
-
-}
-
-
-/* =========================
-   音声入力
-========================= */
-
-function startVoice(inputId, button) {
-
-const SpeechRecognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
-
-if (!SpeechRecognition) {
-
-alert(
-"このブラウザでは音声入力に対応していません。スマホのChromeなどで試してください。"
-);
-
-return;
-
-}
-
-const recognition =
-new SpeechRecognition();
-
-recognition.lang = "ja-JP";
-
-recognition.interimResults = false;
-
-recognition.continuous = false;
-
-
-button.classList.add("listening");
-
-button.textContent = "🔴";
-
-
-recognition.onresult =
-function(event) {
-
-const text =
-event.results[0][0].transcript;
-
-document.getElementById(
-inputId
-).value = text;
-
-};
-
-
-recognition.onerror =
-function() {
-
-alert(
-"音声を認識できませんでした。もう一度試してください。"
-);
-
-};
-
-
-recognition.onend =
-function() {
-
-button.classList.remove(
-"listening"
-);
-
-button.textContent = "🎤";
-
-};
-
-
-recognition.start();
-
-}
-
-
-/* =========================
-   未定切替
-========================= */
-
-let isUndecided = false;
-
-
-function toggleUndecided() {
-
-isUndecided =
-!isUndecided;
-
-
-const date =
-document.getElementById(
-"scheduleDate"
-);
-
-const time =
-document.getElementById(
-"scheduleTime"
-);
-
-const message =
-document.getElementById(
-"dateTimeMessage"
-);
-
-
-if (isUndecided) {
-
-date.disabled = true;
-
-time.disabled = true;
-
-date.value = "";
-
-time.value = "";
-
-message.textContent =
-"❓ 日時未定として登録します";
-
-}
-
-else {
-
-date.disabled = false;
-
-time.disabled = false;
-
-message.textContent =
-"日時を指定して登録できます";
-
-setDefaultDateTime();
-
-}
-
-}
-
-
-/* =========================
-   デフォルト日時
-========================= */
-
-function setDefaultDateTime() {
-
-const now =
-new Date();
-
-
-const year =
-now.getFullYear();
-
-const month =
-String(
-now.getMonth() + 1
-).padStart(2,"0");
-
-const day =
-String(
-now.getDate()
-).padStart(2,"0");
-
-const hours =
-String(
-now.getHours()
-).padStart(2,"0");
-
-const minutes =
-String(
-now.getMinutes()
-).padStart(2,"0");
-
-
-document.getElementById(
-"scheduleDate"
-).value =
-`${year}-${month}-${day}`;
-
-
-document.getElementById(
-"scheduleTime"
-).value =
-`${hours}:${minutes}`;
-
-}
-
-
-/* =========================
-   予定追加
-========================= */
-
-function addSchedule() {
-
-const date =
-document.getElementById(
-"scheduleDate"
-).value;
-
-const time =
-document.getElementById(
-"scheduleTime"
-).value;
-
-const text =
-document.getElementById(
-"scheduleText"
-).value.trim();
-
-const person =
-document.getElementById(
-"schedulePerson"
-).value;
-
-
-if (!text) {
-
-alert(
-"予定内容を入力してください"
-);
-
-return;
-
-}
-
-
-if (!isUndecided && !date) {
-
-alert(
-"日付を入力するか、「日時未定」を選択してください"
-);
-
-return;
-
-}
-
-
-schedules.push({
-
-id: Date.now(),
-
-date: isUndecided
-? null
-: date,
-
-time: isUndecided
-? null
-: time,
-
-text: text,
-
-person: person,
-
-done: false
-
-});
-
-
-document.getElementById(
-"scheduleText"
-).value = "";
-
-
-if (!isUndecided) {
-
-setDefaultDateTime();
-
-}
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   買い物追加
-========================= */
-
-function addShopping() {
-
-const text =
-document.getElementById(
-"shoppingText"
-).value.trim();
-
-
-if (!text) return;
-
-
-shopping.push({
-
-id: Date.now(),
-
-text: text,
-
-done: false
-
-});
-
-
-document.getElementById(
-"shoppingText"
-).value = "";
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   家事追加
-========================= */
-
-function addHouse() {
-
-const text =
-document.getElementById(
-"houseText"
-).value.trim();
-
-const person =
-document.getElementById(
-"housePerson"
-).value;
-
-
-if (!text) return;
-
-
-house.push({
-
-id: Date.now(),
-
-text: text,
-
-person: person,
-
-done: false
-
-});
-
-
-document.getElementById(
-"houseText"
-).value = "";
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   ご飯追加
-========================= */
-
-function addMeal() {
-
-const text =
-document.getElementById(
-"mealText"
-).value.trim();
-
-const url =
-document.getElementById(
-"mealUrl"
-).value.trim();
-
-
-if (!text) {
-
-alert(
-"料理名を入力してください"
-);
-
-return;
-
-}
-
-
-meals.push({
-
-id: Date.now(),
-
-text: text,
-
-url: url
-
-});
-
-
-document.getElementById(
-"mealText"
-).value = "";
-
-document.getElementById(
-"mealUrl"
-).value = "";
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   完了切替
-========================= */
-
-function toggle(type,id) {
-
-let list;
-
-
-if (type === "schedule")
-list = schedules;
-
-if (type === "shopping")
-list = shopping;
-
-if (type === "house")
-list = house;
-
-
-const item =
-list.find(
-x => x.id === id
-);
-
-
-if (item) {
-
-item.done =
-!item.done;
-
-}
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   予定削除
-========================= */
-
-function deleteSchedule(id) {
-
-if (
-!confirm(
-"この予定を削除しますか？"
-)
-)
-return;
-
-
-schedules =
-schedules.filter(
-x => x.id !== id
-);
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   買い物削除
-========================= */
-
-function deleteShopping(id) {
-
-if (
-!confirm(
-"この商品を削除しますか？"
-)
-)
-return;
-
-
-shopping =
-shopping.filter(
-x => x.id !== id
-);
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   家事削除
-========================= */
-
-function deleteHouse(id) {
-
-if (
-!confirm(
-"この家事を削除しますか？"
-)
-)
-return;
-
-
-house =
-house.filter(
-x => x.id !== id
-);
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   ご飯削除
-========================= */
-
-function deleteMeal(id) {
-
-if (
-!confirm(
-"この料理を削除しますか？"
-)
-)
-return;
-
-
-meals =
-meals.filter(
-x => x.id !== id
-);
-
-
-save();
-
-render();
-
-}
-
-
-/* =========================
-   予定表示
-========================= */
-
-function renderSchedules() {
-
-const today =
-getToday();
-
-
-/* 今日 */
-
-const todayList =
-schedules
-.filter(
-x => x.date === today
-)
-.sort(
-(a,b) =>
-(a.time || "")
-.localeCompare(
-b.time || ""
-)
-);
-
-
-const todayArea =
-document.getElementById(
-"todaySchedule"
-);
-
-
-if (todayList.length === 0) {
-
-todayArea.innerHTML =
-'<div class="empty">今日の予定はありません</div>';
-
-}
-
-else {
-
-todayArea.innerHTML =
-todayList.map(
-x => `
-
-<div class="today">
-
-<div class="item">
-
-<input
-type="checkbox"
-
-${x.done ? "checked" : ""}
-
-onclick="
-toggle(
-'schedule',
-${x.id}
-)
-"
->
-
-<div class="item-content">
-
-<div class="${
-x.done ? "done" : ""
-}">
-
-${x.time || ""}
-
-　
-
-${x.text}
-
-</div>
-
-<div class="item-detail">
-
-担当：${x.person}
-
-</div>
-
-</div>
-
-<button
-class="delete"
-onclick="
-deleteSchedule(${x.id})
-">
-
-削除
-
-</button>
-
-</div>
-
-</div>
-
-`
-).join("");
-
-}
-
-
-/* 日時未定 */
-
-const undecided =
-schedules.filter(
-x => !x.date
-);
-
-
-const undecidedArea =
-document.getElementById(
-"undecidedSchedule"
-);
-
-
-if (undecided.length === 0) {
-
-undecidedArea.innerHTML =
-'<div class="empty">日時未定の予定はありません</div>';
-
-}
-
-else {
-
-undecidedArea.innerHTML =
-undecided.map(
-x => `
-
-<div class="undecided-box">
-
-<div class="item">
-
-<input
-type="checkbox"
-
-${x.done ? "checked" : ""}
-
-onclick="
-toggle(
-'schedule',
-${x.id}
-)
-"
->
-
-<div class="item-content">
-
-<div class="${
-x.done ? "done" : ""
-}">
-
-❓ ${x.text}
-
-</div>
-
-<div class="item-detail">
-
-担当：${x.person}
-
-</div>
-
-</div>
-
-<button
-class="delete"
-onclick="
-deleteSchedule(${x.id})
-">
-
-削除
-
-</button>
-
-</div>
-
-</div>
-
-`
-).join("");
-
-}
-
-
-/* 今後 */
-
-const futureList =
-schedules
-.filter(
-x =>
-x.date &&
-x.date > today
-)
-.sort(
-(a,b) => {
-
-const aDate =
-a.date + " " + (a.time || "");
-
-const bDate =
-b.date + " " + (b.time || "");
-
-return aDate.localeCompare(
-bDate
-);
-
-}
-);
-
-
-const futureArea =
-document.getElementById(
-"futureSchedule"
-);
-
-
-if (futureList.length === 0) {
-
-futureArea.innerHTML =
-'<div class="empty">今後の予定はありません</div>';
-
-}
-
-else {
-
-let currentDate = "";
-
-
-futureArea.innerHTML =
-futureList.map(
-x => {
-
-let title = "";
-
-
-if (x.date !== currentDate) {
-
-currentDate = x.date;
-
-title =
-`
-<div class="date-title">
-
-📅 ${formatDate(x.date)}
-
-</div>
-`;
-
-}
-
-
-return `
-
-${title}
-
-<div class="item">
-
-<input
-type="checkbox"
-
-${x.done ? "checked" : ""}
-
-onclick="
-toggle(
-'schedule',
-${x.id}
-)
-"
->
-
-<div class="item-content">
-
-<div class="${
-x.done ? "done" : ""
-}">
-
-${x.time || ""}
-
-　
-
-${x.text}
-
-</div>
-
-<div class="item-detail">
-
-担当：${x.person}
-
-</div>
-
-</div>
-
-<button
-class="delete"
-onclick="
-deleteSchedule(${x.id})
-">
-
-削除
-
-</button>
-
-</div>
-
-`;
-
-}
-).join("");
-
-}
-
-}
-
-
-/* =========================
-   買い物表示
-========================= */
-
-function renderShopping() {
-
-const area =
-document.getElementById(
-"shoppingList"
-);
-
-
-if (shopping.length === 0) {
-
-area.innerHTML =
-'<div class="empty">買い物はありません</div>';
-
-return;
-
-}
-
-
-area.innerHTML =
-shopping.map(
-x => `
-
-<div class="item">
-
-<input
-type="checkbox"
-
-${x.done ? "checked" : ""}
-
-onclick="
-toggle(
-'shopping',
-${x.id}
-)
-"
->
-
-<div class="item-content">
-
-<div class="${
-x.done ? "done" : ""
-}">
-
-${x.text}
-
-</div>
-
-</div>
-
-<button
-class="delete"
-onclick="
-deleteShopping(${x.id})
-">
-
-削除
-
-</button>
-
-</div>
-
-`
-).join("");
-
-}
-
-
-/* =========================
-   家事表示
-========================= */
-
-function renderHouse() {
-
-const area =
-document.getElementById(
-"houseList"
-);
-
-
-if (house.length === 0) {
-
-area.innerHTML =
-'<div class="empty">家事はありません</div>';
-
-return;
-
-}
-
-
-area.innerHTML =
-house.map(
-x => `
-
-<div class="item">
-
-<input
-type="checkbox"
-
-${x.done ? "checked" : ""}
-
-onclick="
-toggle(
-'house',
-${x.id}
-)
-"
->
-
-<div class="item-content">
-
-<div class="${
-x.done ? "done" : ""
-}">
-
-${x.text}
-
-</div>
-
-<div class="item-detail">
-
-担当：${x.person}
-
-</div>
-
-</div>
-
-<button
-class="delete"
-onclick="
-deleteHouse(${x.id})
-">
-
-削除
-
-</button>
-
-</div>
-
-`
-).join("");
-
-}
-
-
-/* =========================
-   ご飯表示
-========================= */
-
-function renderMeals() {
-
-const area =
-document.getElementById(
-"mealList"
-);
-
-
-if (meals.length === 0) {
-
-area.innerHTML =
-'<div class="empty">料理が登録されていません</div>';
-
-return;
-
-}
-
-
-area.innerHTML =
-meals.map(
-x => `
-
-<div class="item">
-
-<div class="item-content">
-
-<div class="item-title">
-
-🍚 ${x.text}
-
-</div>
-
-${
-x.url
-?
-`
-<div class="item-detail">
-
-<a
-class="recipe"
-href="${x.url}"
-target="_blank"
->
-
-🔗 参考レシピを見る
-
-</a>
-
-</div>
-`
-:
-""
-}
-
-</div>
-
-<button
-class="delete"
-onclick="
-deleteMeal(${x.id})
-">
-
-削除
-
-</button>
-
-</div>
-
-`
-).join("");
-
-}
-
-
-/* =========================
-   全体
-========================= */
-
-function render() {
-
-renderSchedules();
-
-renderShopping();
-
-renderHouse();
-
-renderMeals();
-
-
-const today =
-getToday();
-
-
-document.getElementById(
-"todayCount"
-).textContent =
-
-schedules.filter(
-x =>
-x.date === today
-&&
-!x.done
-).length;
-
-
-document.getElementById(
-"shoppingCount"
-).textContent =
-
-shopping.filter(
-x => !x.done
-).length;
-
-
-document.getElementById(
-"houseCount"
-).textContent =
-
-house.filter(
-x => !x.done
-).length;
-
-}
-
-
-/* =========================
-   起動
-========================= */
-
-setDefaultDateTime();
-
-render();
-
-function searchRecipe() {
-    const keyword = document.getElementById("recipeSearch").value.trim();
-    if (!keyword) {
-        alert("材料名を入力してください");
-        return;
-    }
-    window.open("https://www.google.com/search?q=" + encodeURIComponent(keyword + " レシピ"), "_blank");
-}
-
-function quickAddShopping(name) {
-    shopping.push({
-        id: Date.now(),
-        text: name,
-        done: false
-    });
-    save();
-    render();
-}
-</script>
+                        <div class="item">
+                            <input type="checkbox" ${x.done ? "checked" : ""}
+                                onclick="toggle('schedule', ${x.id})">
+
+                            <div class="item-content">
+                                <div class="${x.done ? "done" : ""}">
+                                    ${x.time || ""}　${x.text}
+                                </div>
+
+                                <div class="item-detail">
+                                    担当：${x.person}
+                                </div>
+                            </div>
+
+                            <button class="delete" onclick="deleteSchedule(${x.id})">削除</button>
+                        </div>
+                    `;
+                }).join("");
+            }
+        }
+
+        /* =========================
+           買い物表示
+        ========================= */
+
+        function renderShopping() {
+            const area = document.getElementById("shoppingList");
+
+            if (shopping.length === 0) {
+                area.innerHTML = '<div class="empty">買い物はありません</div>';
+                return;
+            }
+
+            area.innerHTML = shopping.map(x => `
+                <div class="item">
+                    <input type="checkbox" ${x.done ? "checked" : ""}
+                        onclick="toggle('shopping', ${x.id})">
+
+                    <div class="item-content">
+                        <div class="${x.done ? "done" : ""}">
+                            ${x.text}
+                        </div>
+                    </div>
+
+                    <button class="delete" onclick="deleteShopping(${x.id})">削除</button>
+                </div>
+            `).join("");
+        }
+
+        /* =========================
+           家事表示
+        ========================= */
+
+        function renderHouse() {
+            const area = document.getElementById("houseList");
+
+            if (house.length === 0) {
+                area.innerHTML = '<div class="empty">家事はありません</div>';
+                return;
+            }
+
+            area.innerHTML = house.map(x => `
+                <div class="item">
+                    <input type="checkbox" ${x.done ? "checked" : ""}
+                        onclick="toggle('house', ${x.id})">
+
+                    <div class="item-content">
+                        <div class="${x.done ? "done" : ""}">
+                            ${x.text}
+                        </div>
+
+                        <div class="item-detail">
+                            担当：${x.person}
+                        </div>
+                    </div>
+
+                    <button class="delete" onclick="deleteHouse(${x.id})">削除</button>
+                </div>
+            `).join("");
+        }
+
+        /* =========================
+           ご飯表示
+        ========================= */
+
+        function renderMeals() {
+            const area = document.getElementById("mealList");
+
+            if (meals.length === 0) {
+                area.innerHTML = '<div class="empty">料理が登録されていません</div>';
+                return;
+            }
+
+            area.innerHTML = meals.map(x => `
+                <div class="item">
+                    <div class="item-content">
+                        <div class="item-title">🍚 ${x.text}</div>
+
+                        ${x.url ? `
+                            <div class="item-detail">
+                                <a class="recipe" href="${x.url}" target="_blank">
+                                    🔗 参考レシピを見る
+                                </a>
+                            </div>
+                        ` : ""}
+                    </div>
+
+                    <button class="delete" onclick="deleteMeal(${x.id})">削除</button>
+                </div>
+            `).join("");
+        }
+
+        /* =========================
+           家族メモ表示
+        ========================= */
+
+        function renderFamilyMemos() {
+            const area = document.getElementById("familyMemoList");
+
+            if (familyMemos.length === 0) {
+                area.innerHTML = '<div class="empty">家族メモはありません</div>';
+                return;
+            }
+
+            area.innerHTML = familyMemos.map(x => `
+                <div class="family-memo">
+                    <div class="item">
+                        <div class="item-content">
+                            <div class="memo-text">${escapeHtml(x.text)}</div>
+                        </div>
+
+                        <button class="delete" onclick="deleteFamilyMemo(${x.id})">
+                            削除
+                        </button>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        /* =========================
+           HTML特殊文字対策
+        ========================= */
+
+        function escapeHtml(text) {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /* =========================
+           Googleレシピ検索
+        ========================= */
+
+        function searchRecipe() {
+            const keyword = document.getElementById("recipeSearch").value.trim();
+
+            if (!keyword) {
+                alert("材料名を入力してください");
+                return;
+            }
+
+            const url = "https://www.google.com/search?q=" +
+                encodeURIComponent(keyword + " レシピ");
+
+            window.open(url, "_blank");
+        }
+
+        /* =========================
+           全体表示
+        ========================= */
+
+        function render() {
+            renderSchedules();
+            renderShopping();
+            renderHouse();
+            renderMeals();
+            renderFamilyMemos();
+
+            const today = getToday();
+
+            document.getElementById("todayCount").textContent =
+                schedules.filter(x => x.date === today && !x.done).length;
+
+            document.getElementById("shoppingCount").textContent =
+                shopping.filter(x => !x.done).length;
+
+            document.getElementById("houseCount").textContent =
+                house.filter(x => !x.done).length;
+        }
+
+        /* =========================
+           起動
+        ========================= */
+
+        setDefaultDateTime();
+        render();
+    </script>
 
 </body>
-
 </html>

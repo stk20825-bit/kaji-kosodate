@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>わが家の家事・育児</title>
+
+
+<style>
+
+/* =========================
+   基本
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+
+    margin: 0;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background: #f5f6f8;
+
+    color: #333;
+}
+
+
+/* =========================
+   ヘッダー
+========================= */
+
+header {
+
+    background: white;
+
+    padding: 18px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 10;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+header h1 {
+
+    margin: 0;
+
+    font-size: 22px;
+
+}
+
+header p {
+
+    margin: 5px 0 0;
+
+    color: #777;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================
+   メイン
+========================= */
+
+.container {
+
+    max-width: 750px;
+
+    margin: auto;
+
+    padding: 15px;
+
+}
+
+
+/* =========================
+   カード
+========================= */
+
+.card {
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,0.06);
+
+}
+
+.card h2 {
+
+    margin-top: 0;
+
+    font-size: 19px;
+
+}
+
+
+/* =========================
+   入力
+========================= */
+
+input,
+select {
+
+    width: 100%;
+
+    padding: 11px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+
+    margin-bottom: 8px;
+
+    font-size: 16px;
+
+}
+
+button {
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 10px 14px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+}
+
+
+/* =========================
+   ボタン
+========================= */
+
+.add {
+
+    background: #222;
+
+    color: white;
+
+    width: 100%;
+
+}
+
+.delete {
+
+    background: #eee;
+
+    color: #c00;
+
+}
+
+.edit {
+
+    background: #eee;
+
+}
+
+
+/* =========================
+   行
+========================= */
+
+.row {
+
+    display: flex;
+
+    gap: 8px;
+
+}
+
+.row > * {
+
+    flex: 1;
+
+}
+
+
+/* =========================
+   項目
+========================= */
+
+.item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 0;
+
+    border-bottom:
+        1px solid #eee;
+
+}
+
+.item:last-child {
+
+    border-bottom: none;
+
+}
+
+.item input[type="checkbox"] {
+
+    width: 20px;
+
+    height: 20px;
+
+    margin: 0;
+
+}
+
+.item-content {
+
+    flex: 1;
+
+}
+
+.item-title {
+
+    font-weight: bold;
+
+}
+
+.item-detail {
+
+    font-size: 13px;
+
+    color: #777;
+
+    margin-top: 3px;
+
+}
+
+.done {
+
+    text-decoration: line-through;
+
+    color: #999;
+
+}
+
+
+/* =========================
+   今日の予定
+========================= */
+
+.today {
+
+    background: #fff8df;
+
+    border-left:
+        5px solid #e5b700;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    margin-bottom: 10px;
+
+}
+
+.date-title {
+
+    font-weight: bold;
+
+    margin-top: 15px;
+
+    margin-bottom: 5px;
+
+    font-size: 16px;
+
+}
+
+
+/* =========================
+   サマリー
+========================= */
+
+.summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 8px;
+
+}
+
+.summary-box {
+
+    background: #f1f2f5;
+
+    padding: 12px;
+
+    text-align: center;
+
+    border-radius: 10px;
+
+}
+
+.summary-number {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   空表示
+========================= */
+
+.empty {
+
+    color: #999;
+
+    text-align: center;
+
+    padding: 15px;
+
+}
+
+
+/* =========================
+   レシピ
+========================= */
+
+.recipe {
+
+    color: #333;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media(max-width:500px) {
+
+    .container {
+
+        padding: 10px;
+
+    }
+
+    .card {
+
+        padding: 15px;
+
+    }
+
+    .row {
+
+        flex-direction: column;
+
+        gap: 0;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     ヘッダー
+========================= -->
+
+<header>
+
+<h1>🏠 わが家の家事・育児</h1>
+
+<p>
+家族で予定・家事・買い物・ご飯を共有
+</p>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- =========================
+     今日の状況
+========================= -->
+
+<div class="card">
+
+<h2>📊 今日の状況</h2>
+
+<div class="summary">
+
+
+<div class="summary-box">
+
+<div
+class="summary-number"
+id="todayCount">
+
+0
+
+</div>
+
+<div>
+
+今日の予定
+
+</div>
+
+</div>
+
+
+<div class="summary-box">
+
+<div
+class="summary-number"
+id="shoppingCount">
+
+0
+
+</div>
+
+<div>
+
+買い物
+
+</div>
+
+</div>
+
+
+<div class="summary-box">
+
+<div
+class="summary-number"
+id="houseCount">
+
+0
+
+</div>
+
+<div>
+
+家事
+
+</div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     今日の予定
+========================= -->
+
+<div class="card">
+
+<h2>⭐ 今日の予定</h2>
+
+<div id="todaySchedule"></div>
+
+</div>
+
+
+
+<!-- =========================
+     予定登録
+========================= -->
+
+<div class="card">
+
+<h2>📅 予定を登録</h2>
+
+
+<label>
+日付
+</label>
+
+<input
+type="date"
+id="scheduleDate"
+>
+
+
+<label>
+時刻
+</label>
+
+<input
+type="time"
+id="scheduleTime"
+>
+
+
+<label>
+予定内容
+</label>
+
+<input
+type="text"
+id="scheduleText"
+placeholder="例：保育園お迎え"
+>
+
+
+<label>
+担当
+</label>
+
+<select id="schedulePerson">
+
+<option>パパ</option>
+
+<option>ママ</option>
+
+<option>家族</option>
+
+</select>
+
+
+<button
+class="add"
+onclick="addSchedule()">
+
+＋ 予定を登録
+
+</button>
+
+</div>
+
+
+
+<!-- =========================
+     今後の予定
+========================= -->
+
+<div class="card">
+
+<h2>📆 今後の予定</h2>
+
+<div id="futureSchedule"></div>
+
+</div>
+
+
+
+<!-- =========================
+     買い物
+========================= -->
+
+<div class="card">
+
+<h2>🛒 買い物リスト</h2>
+
+<div id="shoppingList"></div>
+
+<hr>
+
+
+<input
+id="shoppingText"
+placeholder="例：牛乳"
+>
+
+
+<button
+class="add"
+onclick="addShopping()">
+
+＋ 買い物を追加
+
+</button>
+
+</div>
+
+
+
+<!-- =========================
+     家事
+========================= -->
+
+<div class="card">
+
+<h2>🧹 家事ルーティン</h2>
+
+<div id="houseList"></div>
+
+<hr>
+
+
+<input
+id="houseText"
+placeholder="例：洗濯"
+>
+
+
+<select id="housePerson">
+
+<option>パパ</option>
+
+<option>ママ</option>
+
+<option>家族</option>
+
+</select>
+
+
+<button
+class="add"
+onclick="addHouse()">
+
+＋ 家事を追加
+
+</button>
+
+</div>
+
+
+
+<!-- =========================
+     ご飯
+========================= -->
+
+<div class="card">
+
+<h2>🍚 ご飯リスト</h2>
+
+<div id="mealList"></div>
+
+<hr>
+
+
+<label>
+料理名
+</label>
+
+<input
+id="mealText"
+placeholder="例：カレー"
+>
+
+
+<label>
+参考レシピURL
+</label>
+
+<input
+id="mealUrl"
+placeholder="https://..."
+>
+
+
+<button
+class="add"
+onclick="addMeal()">
+
+＋ ご飯を追加
+
+</button>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ==================================================
+   データ読み込み
+================================================== */
+
+
+let schedules =
+
+JSON.parse(
+localStorage.getItem(
+"schedules"
+) || "[]"
+);
+
+
+let shopping =
+
+JSON.parse(
+localStorage.getItem(
+"shopping"
+) || "[]"
+);
+
+
+let house =
+
+JSON.parse(
+localStorage.getItem(
+"house"
+) || "[]"
+);
+
+
+let meals =
+
+JSON.parse(
+localStorage.getItem(
+"meals"
+) || "[]"
+);
+
+
+
+/* ==================================================
+   保存
+================================================== */
+
+function save() {
+
+
+localStorage.setItem(
+
+"schedules",
+
+JSON.stringify(
+schedules
+)
+
+);
+
+
+localStorage.setItem(
+
+"shopping",
+
+JSON.stringify(
+shopping
+)
+
+);
+
+
+localStorage.setItem(
+
+"house",
+
+JSON.stringify(
+house
+)
+
+);
+
+
+localStorage.setItem(
+
+"meals",
+
+JSON.stringify(
+meals
+)
+
+);
+
+}
+
+
+
+/* ==================================================
+   今日の日付
+================================================== */
+
+function getToday() {
+
+const now = new Date();
+
+const year =
+now.getFullYear();
+
+const month =
+String(
+now.getMonth() + 1
+).padStart(2,"0");
+
+const day =
+String(
+now.getDate()
+).padStart(2,"0");
+
+
+return `${year}-${month}-${day}`;
+
+}
+
+
+
+/* ==================================================
+   日付表示
+================================================== */
+
+function formatDate(date) {
+
+const d =
+new Date(
+date + "T00:00:00"
+);
+
+return (
+
+d.getMonth() + 1
+)
++
+"月"
++
+d.getDate()
++
+"日";
+
+}
+
+
+
+/* ==================================================
+   予定追加
+================================================== */
+
+function addSchedule() {
+
+
+const date =
+
+document.getElementById(
+"scheduleDate"
+).value;
+
+
+const time =
+
+document.getElementById(
+"scheduleTime"
+).value;
+
+
+const text =
+
+document.getElementById(
+"scheduleText"
+).value.trim();
+
+
+const person =
+
+document.getElementById(
+"schedulePerson"
+).value;
+
+
+
+if (!date || !text) {
+
+alert(
+"日付と予定内容を入力してください"
+);
+
+return;
+
+}
+
+
+
+schedules.push({
+
+id: Date.now(),
+
+date: date,
+
+time: time,
+
+text: text,
+
+person: person,
+
+done: false
+
+});
+
+
+
+document.getElementById(
+"scheduleText"
+).value = "";
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   買い物追加
+================================================== */
+
+function addShopping() {
+
+
+const text =
+
+document.getElementById(
+"shoppingText"
+).value.trim();
+
+
+if (!text) return;
+
+
+shopping.push({
+
+id: Date.now(),
+
+text: text,
+
+done: false
+
+});
+
+
+document.getElementById(
+"shoppingText"
+).value = "";
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   家事追加
+================================================== */
+
+function addHouse() {
+
+
+const text =
+
+document.getElementById(
+"houseText"
+).value.trim();
+
+
+const person =
+
+document.getElementById(
+"housePerson"
+).value;
+
+
+if (!text) return;
+
+
+house.push({
+
+id: Date.now(),
+
+text: text,
+
+person: person,
+
+done: false
+
+});
+
+
+document.getElementById(
+"houseText"
+).value = "";
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   ご飯追加
+================================================== */
+
+function addMeal() {
+
+
+const text =
+
+document.getElementById(
+"mealText"
+).value.trim();
+
+
+const url =
+
+document.getElementById(
+"mealUrl"
+).value.trim();
+
+
+if (!text) {
+
+alert(
+"料理名を入力してください"
+);
+
+return;
+
+}
+
+
+meals.push({
+
+id: Date.now(),
+
+text: text,
+
+url: url
+
+});
+
+
+document.getElementById(
+"mealText"
+).value = "";
+
+
+document.getElementById(
+"mealUrl"
+).value = "";
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   完了切替
+================================================== */
+
+function toggle(
+type,
+id
+) {
+
+
+let list;
+
+
+if (
+type === "schedule"
+)
+list = schedules;
+
+
+if (
+type === "shopping"
+)
+list = shopping;
+
+
+if (
+type === "house"
+)
+list = house;
+
+
+const item =
+
+list.find(
+x => x.id === id
+);
+
+
+if (item) {
+
+item.done =
+!item.done;
+
+}
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   予定削除
+================================================== */
+
+function deleteSchedule(id) {
+
+
+if (
+!confirm(
+"この予定を削除しますか？"
+)
+)
+return;
+
+
+schedules =
+
+schedules.filter(
+x => x.id !== id
+);
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   買い物削除
+================================================== */
+
+function deleteShopping(id) {
+
+
+if (
+!confirm(
+"この商品を削除しますか？"
+)
+)
+return;
+
+
+shopping =
+
+shopping.filter(
+x => x.id !== id
+);
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   家事削除
+================================================== */
+
+function deleteHouse(id) {
+
+
+if (
+!confirm(
+"この家事を削除しますか？"
+)
+)
+return;
+
+
+house =
+
+house.filter(
+x => x.id !== id
+);
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   ご飯削除
+================================================== */
+
+function deleteMeal(id) {
+
+
+if (
+!confirm(
+"この料理を削除しますか？"
+)
+)
+return;
+
+
+meals =
+
+meals.filter(
+x => x.id !== id
+);
+
+
+save();
+
+render();
+
+}
+
+
+
+/* ==================================================
+   予定表示
+================================================== */
+
+function renderSchedules() {
+
+
+const today =
+getToday();
+
+
+/* -------------------------
+   今日
+------------------------- */
+
+const todayList =
+
+schedules
+
+.filter(
+x => x.date === today
+)
+
+.sort(
+(a,b) =>
+(a.time || "")
+.localeCompare(
+b.time || ""
+)
+);
+
+
+const todayArea =
+
+document.getElementById(
+"todaySchedule"
+);
+
+
+if (
+todayList.length === 0
+) {
+
+todayArea.innerHTML =
+
+'<div class="empty">' +
+'今日の予定はありません' +
+'</div>';
+
+}
+
+else {
+
+
+todayArea.innerHTML =
+
+todayList.map(
+x => `
+
+<div class="today">
+
+<div class="item">
+
+<input
+type="checkbox"
+
+${x.done
+? "checked"
+: ""
+}
+
+onclick="
+toggle(
+'schedule',
+${x.id}
+)
+"
+>
+
+<div class="item-content">
+
+<div class="${
+x.done
+? "done"
+: ""
+}">
+
+${
+x.time
+? x.time
+: ""
+}
+
+　
+
+${x.text}
+
+</div>
+
+<div class="item-detail">
+
+担当：${x.person}
+
+</div>
+
+</div>
+
+
+<button
+class="delete"
+
+onclick="
+deleteSchedule(
+${x.id}
+)
+">
+
+削除
+
+</button>
+
+
+</div>
+
+</div>
+
+`
+).join("");
+
+}
+
+
+
+/* -------------------------
+   今後の予定
+------------------------- */
+
+const futureList =
+
+schedules
+
+.filter(
+x => x.date > today
+)
+
+.sort(
+(a,b) => {
+
+const aDate =
+a.date + " " + a.time;
+
+const bDate =
+b.date + " " + b.time;
+
+return aDate.localeCompare(
+bDate
+);
+
+}
+);
+
+
+const futureArea =
+
+document.getElementById(
+"futureSchedule"
+);
+
+
+if (
+futureList.length === 0
+) {
+
+futureArea.innerHTML =
+
+'<div class="empty">' +
+'今後の予定はありません' +
+'</div>';
+
+}
+
+else {
+
+
+let currentDate = "";
+
+
+futureArea.innerHTML =
+
+futureList.map(
+x => {
+
+let title = "";
+
+
+if (
+x.date !== currentDate
+) {
+
+currentDate =
+x.date;
+
+title =
+
+`
+<div class="date-title">
+📅 ${formatDate(x.date)}
+</div>
+`;
+
+}
+
+
+return `
+
+${title}
+
+<div class="item">
+
+<input
+type="checkbox"
+
+${x.done
+? "checked"
+: ""
+}
+
+onclick="
+toggle(
+'schedule',
+${x.id}
+)
+"
+>
+
+
+<div class="item-content">
+
+<div class="${
+x.done
+? "done"
+: ""
+}">
+
+${
+x.time
+? x.time
+: ""
+}
+
+　
+
+${x.text}
+
+</div>
+
+
+<div class="item-detail">
+
+担当：${x.person}
+
+</div>
+
+</div>
+
+
+<button
+class="delete"
+
+onclick="
+deleteSchedule(
+${x.id}
+)
+">
+
+削除
+
+</button>
+
+
+</div>
+
+`;
+
+}
+
+).join("");
+
+}
+
+}
+
+
+
+/* ==================================================
+   買い物表示
+================================================== */
+
+function renderShopping() {
+
+
+const area =
+
+document.getElementById(
+"shoppingList"
+);
+
+
+if (
+shopping.length === 0
+) {
+
+area.innerHTML =
+
+'<div class="empty">' +
+'買い物はありません' +
+'</div>';
+
+return;
+
+}
+
+
+area.innerHTML =
+
+shopping.map(
+x => `
+
+<div class="item">
+
+<input
+type="checkbox"
+
+${x.done
+? "checked"
+: ""
+}
+
+onclick="
+toggle(
+'shopping',
+${x.id}
+)
+"
+>
+
+
+<div class="item-content">
+
+<div class="${
+x.done
+? "done"
+: ""
+}">
+
+${x.text}
+
+</div>
+
+</div>
+
+
+<button
+class="delete"
+
+onclick="
+deleteShopping(
+${x.id}
+)
+">
+
+削除
+
+</button>
+
+
+</div>
+
+`
+).join("");
+
+}
+
+
+
+/* ==================================================
+   家事表示
+================================================== */
+
+function renderHouse() {
+
+
+const area =
+
+document.getElementById(
+"houseList"
+);
+
+
+if (
+house.length === 0
+) {
+
+area.innerHTML =
+
+'<div class="empty">' +
+'家事はありません' +
+'</div>';
+
+return;
+
+}
+
+
+area.innerHTML =
+
+house.map(
+x => `
+
+<div class="item">
+
+<input
+type="checkbox"
+
+${x.done
+? "checked"
+: ""
+}
+
+onclick="
+toggle(
+'house',
+${x.id}
+)
+"
+>
+
+
+<div class="item-content">
+
+<div class="${
+x.done
+? "done"
+: ""
+}">
+
+${x.text}
+
+</div>
+
+
+<div class="item-detail">
+
+担当：${x.person}
+
+</div>
+
+</div>
+
+
+<button
+class="delete"
+
+onclick="
+deleteHouse(
+${x.id}
+)
+">
+
+削除
+
+</button>
+
+
+</div>
+
+`
+).join("");
+
+}
+
+
+
+/* ==================================================
+   ご飯表示
+================================================== */
+
+function renderMeals() {
+
+
+const area =
+
+document.getElementById(
+"mealList"
+);
+
+
+if (
+meals.length === 0
+) {
+
+area.innerHTML =
+
+'<div class="empty">' +
+'料理が登録されていません' +
+'</div>';
+
+return;
+
+}
+
+
+area.innerHTML =
+
+meals.map(
+x => `
+
+<div class="item">
+
+
+<div class="item-content">
+
+
+<div class="item-title">
+
+🍚 ${x.text}
+
+</div>
+
+
+${
+x.url
+
+?
+
+`
+
+<div class="item-detail">
+
+<a
+class="recipe"
+
+href="${x.url}"
+
+target="_blank"
+>
+
+🔗 参考レシピを見る
+
+</a>
+
+</div>
+
+`
+
+:
+
+""
+
+}
+
+
+</div>
+
+
+<button
+class="delete"
+
+onclick="
+deleteMeal(
+${x.id}
+)
+">
+
+削除
+
+</button>
+
+
+</div>
+
+`
+).join("");
+
+}
+
+
+
+/* ==================================================
+   全体表示
+================================================== */
+
+function render() {
+
+
+renderSchedules();
+
+renderShopping();
+
+renderHouse();
+
+renderMeals();
+
+
+/* 今日の予定 */
+
+const today =
+getToday();
+
+
+document.getElementById(
+"todayCount"
+).textContent =
+
+schedules.filter(
+x =>
+x.date === today
+&&
+!x.done
+).length;
+
+
+/* 買い物 */
+
+document.getElementById(
+"shoppingCount"
+).textContent =
+
+shopping.filter(
+x => !x.done
+).length;
+
+
+/* 家事 */
+
+document.getElementById(
+"houseCount"
+).textContent =
+
+house.filter(
+x => !x.done
+).length;
+
+}
+
+
+
+
+/* ==================================================
+   初期表示
+================================================== */
+
+function setDefaultDateTime() {
+
+    const now = new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+    const hours =
+        String(
+            now.getHours()
+        ).padStart(2, "0");
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+
+    document.getElementById(
+        "scheduleDate"
+    ).value =
+        `${year}-${month}-${day}`;
+
+
+    document.getElementById(
+        "scheduleTime"
+    ).value =
+        `${hours}:${minutes}`;
+
+}
+
+
+setDefaultDateTime();
+
+render();
+
+
+</script>
+
+
+</body>
+
+</html>

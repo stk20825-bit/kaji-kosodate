@@ -10,387 +10,229 @@ content="width=device-width, initial-scale=1.0">
 
 <title>わが家の家事・育児</title>
 
-
 <style>
-
-/* =========================
-   基本
-========================= */
 
 * {
     box-sizing: border-box;
 }
 
 body {
-
     margin: 0;
-
     font-family:
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
-
     background: #f5f6f8;
-
     color: #333;
 }
 
-
-/* =========================
-   ヘッダー
-========================= */
-
 header {
-
     background: white;
-
     padding: 18px;
-
     position: sticky;
-
     top: 0;
-
     z-index: 10;
-
     border-bottom: 1px solid #ddd;
-
 }
 
 header h1 {
-
     margin: 0;
-
     font-size: 22px;
-
 }
 
 header p {
-
     margin: 5px 0 0;
-
     color: #777;
-
     font-size: 13px;
-
 }
-
-
-/* =========================
-   メイン
-========================= */
 
 .container {
-
     max-width: 750px;
-
     margin: auto;
-
     padding: 15px;
-
 }
 
-
-/* =========================
-   カード
-========================= */
-
 .card {
-
     background: white;
-
     border-radius: 14px;
-
     padding: 18px;
-
     margin-bottom: 15px;
-
-    box-shadow:
-        0 2px 8px rgba(0,0,0,0.06);
-
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .card h2 {
-
     margin-top: 0;
-
     font-size: 19px;
-
 }
-
-
-/* =========================
-   入力
-========================= */
 
 input,
 select {
-
     width: 100%;
-
     padding: 11px;
-
     border: 1px solid #ccc;
-
     border-radius: 8px;
-
     margin-bottom: 8px;
-
     font-size: 16px;
-
 }
 
 button {
-
     border: none;
-
     border-radius: 8px;
-
     padding: 10px 14px;
-
     cursor: pointer;
-
     font-size: 15px;
-
 }
 
-
-/* =========================
-   ボタン
-========================= */
-
 .add {
-
     background: #222;
-
     color: white;
-
     width: 100%;
+}
 
+.voice {
+    background: #eee;
+    min-width: 55px;
+    margin-bottom: 8px;
+}
+
+.voice.listening {
+    background: #ffdddd;
+}
+
+.undecided {
+    background: #fff0c2;
+    color: #6b5000;
+    width: 100%;
+    margin-bottom: 8px;
 }
 
 .delete {
-
     background: #eee;
-
     color: #c00;
-
 }
-
-.edit {
-
-    background: #eee;
-
-}
-
-
-/* =========================
-   行
-========================= */
 
 .row {
-
     display: flex;
-
     gap: 8px;
-
 }
 
 .row > * {
-
     flex: 1;
-
 }
 
+.input-with-voice {
+    display: flex;
+    gap: 6px;
+}
 
-/* =========================
-   項目
-========================= */
+.input-with-voice input {
+    flex: 1;
+}
 
 .item {
-
     display: flex;
-
     align-items: center;
-
     gap: 10px;
-
     padding: 12px 0;
-
-    border-bottom:
-        1px solid #eee;
-
+    border-bottom: 1px solid #eee;
 }
 
 .item:last-child {
-
     border-bottom: none;
-
 }
 
 .item input[type="checkbox"] {
-
     width: 20px;
-
     height: 20px;
-
     margin: 0;
-
 }
 
 .item-content {
-
     flex: 1;
-
 }
 
 .item-title {
-
     font-weight: bold;
-
 }
 
 .item-detail {
-
     font-size: 13px;
-
     color: #777;
-
     margin-top: 3px;
-
 }
 
 .done {
-
     text-decoration: line-through;
-
     color: #999;
-
 }
 
-
-/* =========================
-   今日の予定
-========================= */
-
 .today {
-
     background: #fff8df;
-
-    border-left:
-        5px solid #e5b700;
-
+    border-left: 5px solid #e5b700;
     padding: 12px;
-
     border-radius: 8px;
-
     margin-bottom: 10px;
+}
 
+.undecided-box {
+    background: #f4f0ff;
+    border-left: 5px solid #8064a2;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
 }
 
 .date-title {
-
     font-weight: bold;
-
     margin-top: 15px;
-
     margin-bottom: 5px;
-
     font-size: 16px;
-
 }
 
-
-/* =========================
-   サマリー
-========================= */
-
 .summary {
-
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-
 }
 
 .summary-box {
-
     background: #f1f2f5;
-
     padding: 12px;
-
     text-align: center;
-
     border-radius: 10px;
-
 }
 
 .summary-number {
-
     font-size: 22px;
-
     font-weight: bold;
-
 }
-
-
-/* =========================
-   空表示
-========================= */
 
 .empty {
-
     color: #999;
-
     text-align: center;
-
     padding: 15px;
-
 }
-
-
-/* =========================
-   レシピ
-========================= */
 
 .recipe {
-
     color: #333;
-
     text-decoration: none;
-
     font-size: 14px;
-
 }
-
-
-/* =========================
-   スマホ
-========================= */
 
 @media(max-width:500px) {
 
     .container {
-
         padding: 10px;
-
     }
 
     .card {
-
         padding: 15px;
-
     }
 
     .row {
-
         flex-direction: column;
-
         gap: 0;
-
     }
 
 }
@@ -399,13 +241,7 @@ button {
 
 </head>
 
-
 <body>
-
-
-<!-- =========================
-     ヘッダー
-========================= -->
 
 <header>
 
@@ -417,20 +253,15 @@ button {
 
 </header>
 
-
 <div class="container">
 
-
-<!-- =========================
-     今日の状況
-========================= -->
+<!-- 今日の状況 -->
 
 <div class="card">
 
 <h2>📊 今日の状況</h2>
 
 <div class="summary">
-
 
 <div class="summary-box">
 
@@ -443,13 +274,10 @@ id="todayCount">
 </div>
 
 <div>
-
 今日の予定
-
 </div>
 
 </div>
-
 
 <div class="summary-box">
 
@@ -462,13 +290,10 @@ id="shoppingCount">
 </div>
 
 <div>
-
 買い物
-
 </div>
 
 </div>
-
 
 <div class="summary-box">
 
@@ -481,23 +306,17 @@ id="houseCount">
 </div>
 
 <div>
-
 家事
+</div>
+
+</div>
 
 </div>
 
 </div>
 
 
-</div>
-
-</div>
-
-
-
-<!-- =========================
-     今日の予定
-========================= -->
+<!-- 今日の予定 -->
 
 <div class="card">
 
@@ -508,15 +327,11 @@ id="houseCount">
 </div>
 
 
-
-<!-- =========================
-     予定登録
-========================= -->
+<!-- 予定登録 -->
 
 <div class="card">
 
 <h2>📅 予定を登録</h2>
-
 
 <label>
 日付
@@ -538,15 +353,45 @@ id="scheduleTime"
 >
 
 
+<button
+class="undecided"
+onclick="toggleUndecided()">
+
+❓ 日時未定
+
+</button>
+
+
+<div
+id="dateTimeMessage"
+style="font-size:13px;color:#777;margin-bottom:10px;">
+
+日時を指定して登録できます
+
+</div>
+
+
 <label>
 予定内容
 </label>
+
+<div class="input-with-voice">
 
 <input
 type="text"
 id="scheduleText"
 placeholder="例：保育園お迎え"
 >
+
+<button
+class="voice"
+onclick="startVoice('scheduleText',this)">
+
+🎤
+
+</button>
+
+</div>
 
 
 <label>
@@ -575,10 +420,18 @@ onclick="addSchedule()">
 </div>
 
 
+<!-- 日時未定 -->
 
-<!-- =========================
-     今後の予定
-========================= -->
+<div class="card">
+
+<h2>📌 日時未定</h2>
+
+<div id="undecidedSchedule"></div>
+
+</div>
+
+
+<!-- 今後の予定 -->
 
 <div class="card">
 
@@ -589,10 +442,7 @@ onclick="addSchedule()">
 </div>
 
 
-
-<!-- =========================
-     買い物
-========================= -->
+<!-- 買い物 -->
 
 <div class="card">
 
@@ -602,12 +452,22 @@ onclick="addSchedule()">
 
 <hr>
 
+<div class="input-with-voice">
 
 <input
 id="shoppingText"
 placeholder="例：牛乳"
 >
 
+<button
+class="voice"
+onclick="startVoice('shoppingText',this)">
+
+🎤
+
+</button>
+
+</div>
 
 <button
 class="add"
@@ -620,10 +480,7 @@ onclick="addShopping()">
 </div>
 
 
-
-<!-- =========================
-     家事
-========================= -->
+<!-- 家事 -->
 
 <div class="card">
 
@@ -633,12 +490,22 @@ onclick="addShopping()">
 
 <hr>
 
+<div class="input-with-voice">
 
 <input
 id="houseText"
 placeholder="例：洗濯"
 >
 
+<button
+class="voice"
+onclick="startVoice('houseText',this)">
+
+🎤
+
+</button>
+
+</div>
 
 <select id="housePerson">
 
@@ -649,7 +516,6 @@ placeholder="例：洗濯"
 <option>家族</option>
 
 </select>
-
 
 <button
 class="add"
@@ -662,10 +528,7 @@ onclick="addHouse()">
 </div>
 
 
-
-<!-- =========================
-     ご飯
-========================= -->
+<!-- ご飯 -->
 
 <div class="card">
 
@@ -675,16 +538,26 @@ onclick="addHouse()">
 
 <hr>
 
-
 <label>
 料理名
 </label>
+
+<div class="input-with-voice">
 
 <input
 id="mealText"
 placeholder="例：カレー"
 >
 
+<button
+class="voice"
+onclick="startVoice('mealText',this)">
+
+🎤
+
+</button>
+
+</div>
 
 <label>
 参考レシピURL
@@ -694,7 +567,6 @@ placeholder="例：カレー"
 id="mealUrl"
 placeholder="https://..."
 >
-
 
 <button
 class="add"
@@ -706,117 +578,255 @@ onclick="addMeal()">
 
 </div>
 
-
 </div>
-
 
 
 <script>
 
-
-/* ==================================================
-   データ読み込み
-================================================== */
-
+/* =========================
+   データ
+========================= */
 
 let schedules =
-
 JSON.parse(
-localStorage.getItem(
-"schedules"
-) || "[]"
+localStorage.getItem("schedules") || "[]"
 );
-
 
 let shopping =
-
 JSON.parse(
-localStorage.getItem(
-"shopping"
-) || "[]"
+localStorage.getItem("shopping") || "[]"
 );
-
 
 let house =
-
 JSON.parse(
-localStorage.getItem(
-"house"
-) || "[]"
+localStorage.getItem("house") || "[]"
 );
-
 
 let meals =
-
 JSON.parse(
-localStorage.getItem(
-"meals"
-) || "[]"
+localStorage.getItem("meals") || "[]"
 );
 
 
-
-/* ==================================================
+/* =========================
    保存
-================================================== */
+========================= */
 
 function save() {
 
-
 localStorage.setItem(
-
 "schedules",
-
-JSON.stringify(
-schedules
-)
-
+JSON.stringify(schedules)
 );
 
-
 localStorage.setItem(
-
 "shopping",
-
-JSON.stringify(
-shopping
-)
-
+JSON.stringify(shopping)
 );
 
-
 localStorage.setItem(
-
 "house",
-
-JSON.stringify(
-house
-)
-
+JSON.stringify(house)
 );
 
-
 localStorage.setItem(
-
 "meals",
-
-JSON.stringify(
-meals
-)
-
+JSON.stringify(meals)
 );
 
 }
 
 
-
-/* ==================================================
-   今日の日付
-================================================== */
+/* =========================
+   今日
+========================= */
 
 function getToday() {
 
 const now = new Date();
+
+const year =
+now.getFullYear();
+
+const month =
+String(now.getMonth() + 1)
+.padStart(2,"0");
+
+const day =
+String(now.getDate())
+.padStart(2,"0");
+
+return `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================
+   日付表示
+========================= */
+
+function formatDate(date) {
+
+const d =
+new Date(date + "T00:00:00");
+
+return (
+d.getMonth() + 1
+)
++
+"月"
++
+d.getDate()
++
+"日";
+
+}
+
+
+/* =========================
+   音声入力
+========================= */
+
+function startVoice(inputId, button) {
+
+const SpeechRecognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+if (!SpeechRecognition) {
+
+alert(
+"このブラウザでは音声入力に対応していません。スマホのChromeなどで試してください。"
+);
+
+return;
+
+}
+
+const recognition =
+new SpeechRecognition();
+
+recognition.lang = "ja-JP";
+
+recognition.interimResults = false;
+
+recognition.continuous = false;
+
+
+button.classList.add("listening");
+
+button.textContent = "🔴";
+
+
+recognition.onresult =
+function(event) {
+
+const text =
+event.results[0][0].transcript;
+
+document.getElementById(
+inputId
+).value = text;
+
+};
+
+
+recognition.onerror =
+function() {
+
+alert(
+"音声を認識できませんでした。もう一度試してください。"
+);
+
+};
+
+
+recognition.onend =
+function() {
+
+button.classList.remove(
+"listening"
+);
+
+button.textContent = "🎤";
+
+};
+
+
+recognition.start();
+
+}
+
+
+/* =========================
+   未定切替
+========================= */
+
+let isUndecided = false;
+
+
+function toggleUndecided() {
+
+isUndecided =
+!isUndecided;
+
+
+const date =
+document.getElementById(
+"scheduleDate"
+);
+
+const time =
+document.getElementById(
+"scheduleTime"
+);
+
+const message =
+document.getElementById(
+"dateTimeMessage"
+);
+
+
+if (isUndecided) {
+
+date.disabled = true;
+
+time.disabled = true;
+
+date.value = "";
+
+time.value = "";
+
+message.textContent =
+"❓ 日時未定として登録します";
+
+}
+
+else {
+
+date.disabled = false;
+
+time.disabled = false;
+
+message.textContent =
+"日時を指定して登録できます";
+
+setDefaultDateTime();
+
+}
+
+}
+
+
+/* =========================
+   デフォルト日時
+========================= */
+
+function setDefaultDateTime() {
+
+const now =
+new Date();
+
 
 const year =
 now.getFullYear();
@@ -831,79 +841,62 @@ String(
 now.getDate()
 ).padStart(2,"0");
 
+const hours =
+String(
+now.getHours()
+).padStart(2,"0");
 
-return `${year}-${month}-${day}`;
+const minutes =
+String(
+now.getMinutes()
+).padStart(2,"0");
 
-}
+
+document.getElementById(
+"scheduleDate"
+).value =
+`${year}-${month}-${day}`;
 
 
-
-/* ==================================================
-   日付表示
-================================================== */
-
-function formatDate(date) {
-
-const d =
-new Date(
-date + "T00:00:00"
-);
-
-return (
-
-d.getMonth() + 1
-)
-+
-"月"
-+
-d.getDate()
-+
-"日";
+document.getElementById(
+"scheduleTime"
+).value =
+`${hours}:${minutes}`;
 
 }
 
 
-
-/* ==================================================
+/* =========================
    予定追加
-================================================== */
+========================= */
 
 function addSchedule() {
 
-
 const date =
-
 document.getElementById(
 "scheduleDate"
 ).value;
 
-
 const time =
-
 document.getElementById(
 "scheduleTime"
 ).value;
 
-
 const text =
-
 document.getElementById(
 "scheduleText"
 ).value.trim();
 
-
 const person =
-
 document.getElementById(
 "schedulePerson"
 ).value;
 
 
-
-if (!date || !text) {
+if (!text) {
 
 alert(
-"日付と予定内容を入力してください"
+"予定内容を入力してください"
 );
 
 return;
@@ -911,14 +904,28 @@ return;
 }
 
 
+if (!isUndecided && !date) {
+
+alert(
+"日付を入力するか、「日時未定」を選択してください"
+);
+
+return;
+
+}
+
 
 schedules.push({
 
 id: Date.now(),
 
-date: date,
+date: isUndecided
+? null
+: date,
 
-time: time,
+time: isUndecided
+? null
+: time,
 
 text: text,
 
@@ -929,11 +936,16 @@ done: false
 });
 
 
-
 document.getElementById(
 "scheduleText"
 ).value = "";
 
+
+if (!isUndecided) {
+
+setDefaultDateTime();
+
+}
 
 save();
 
@@ -942,16 +954,13 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    買い物追加
-================================================== */
+========================= */
 
 function addShopping() {
 
-
 const text =
-
 document.getElementById(
 "shoppingText"
 ).value.trim();
@@ -983,23 +992,18 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    家事追加
-================================================== */
+========================= */
 
 function addHouse() {
 
-
 const text =
-
 document.getElementById(
 "houseText"
 ).value.trim();
 
-
 const person =
-
 document.getElementById(
 "housePerson"
 ).value;
@@ -1033,23 +1037,18 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    ご飯追加
-================================================== */
+========================= */
 
 function addMeal() {
 
-
 const text =
-
 document.getElementById(
 "mealText"
 ).value.trim();
 
-
 const url =
-
 document.getElementById(
 "mealUrl"
 ).value.trim();
@@ -1081,7 +1080,6 @@ document.getElementById(
 "mealText"
 ).value = "";
 
-
 document.getElementById(
 "mealUrl"
 ).value = "";
@@ -1094,40 +1092,26 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    完了切替
-================================================== */
+========================= */
 
-function toggle(
-type,
-id
-) {
-
+function toggle(type,id) {
 
 let list;
 
 
-if (
-type === "schedule"
-)
+if (type === "schedule")
 list = schedules;
 
-
-if (
-type === "shopping"
-)
+if (type === "shopping")
 list = shopping;
 
-
-if (
-type === "house"
-)
+if (type === "house")
 list = house;
 
 
 const item =
-
 list.find(
 x => x.id === id
 );
@@ -1148,13 +1132,11 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    予定削除
-================================================== */
+========================= */
 
 function deleteSchedule(id) {
-
 
 if (
 !confirm(
@@ -1165,7 +1147,6 @@ return;
 
 
 schedules =
-
 schedules.filter(
 x => x.id !== id
 );
@@ -1178,13 +1159,11 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    買い物削除
-================================================== */
+========================= */
 
 function deleteShopping(id) {
-
 
 if (
 !confirm(
@@ -1195,7 +1174,6 @@ return;
 
 
 shopping =
-
 shopping.filter(
 x => x.id !== id
 );
@@ -1208,13 +1186,11 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    家事削除
-================================================== */
+========================= */
 
 function deleteHouse(id) {
-
 
 if (
 !confirm(
@@ -1225,7 +1201,6 @@ return;
 
 
 house =
-
 house.filter(
 x => x.id !== id
 );
@@ -1238,13 +1213,11 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    ご飯削除
-================================================== */
+========================= */
 
 function deleteMeal(id) {
-
 
 if (
 !confirm(
@@ -1255,7 +1228,6 @@ return;
 
 
 meals =
-
 meals.filter(
 x => x.id !== id
 );
@@ -1268,30 +1240,23 @@ render();
 }
 
 
-
-/* ==================================================
+/* =========================
    予定表示
-================================================== */
+========================= */
 
 function renderSchedules() {
-
 
 const today =
 getToday();
 
 
-/* -------------------------
-   今日
-------------------------- */
+/* 今日 */
 
 const todayList =
-
 schedules
-
 .filter(
 x => x.date === today
 )
-
 .sort(
 (a,b) =>
 (a.time || "")
@@ -1302,29 +1267,21 @@ b.time || ""
 
 
 const todayArea =
-
 document.getElementById(
 "todaySchedule"
 );
 
 
-if (
-todayList.length === 0
-) {
+if (todayList.length === 0) {
 
 todayArea.innerHTML =
-
-'<div class="empty">' +
-'今日の予定はありません' +
-'</div>';
+'<div class="empty">今日の予定はありません</div>';
 
 }
 
 else {
 
-
 todayArea.innerHTML =
-
 todayList.map(
 x => `
 
@@ -1335,10 +1292,7 @@ x => `
 <input
 type="checkbox"
 
-${x.done
-? "checked"
-: ""
-}
+${x.done ? "checked" : ""}
 
 onclick="
 toggle(
@@ -1351,16 +1305,10 @@ ${x.id}
 <div class="item-content">
 
 <div class="${
-x.done
-? "done"
-: ""
+x.done ? "done" : ""
 }">
 
-${
-x.time
-? x.time
-: ""
-}
+${x.time || ""}
 
 　
 
@@ -1376,20 +1324,15 @@ ${x.text}
 
 </div>
 
-
 <button
 class="delete"
-
 onclick="
-deleteSchedule(
-${x.id}
-)
+deleteSchedule(${x.id})
 ">
 
 削除
 
 </button>
-
 
 </div>
 
@@ -1401,27 +1344,105 @@ ${x.id}
 }
 
 
+/* 日時未定 */
 
-/* -------------------------
-   今後の予定
-------------------------- */
+const undecided =
+schedules.filter(
+x => !x.date
+);
+
+
+const undecidedArea =
+document.getElementById(
+"undecidedSchedule"
+);
+
+
+if (undecided.length === 0) {
+
+undecidedArea.innerHTML =
+'<div class="empty">日時未定の予定はありません</div>';
+
+}
+
+else {
+
+undecidedArea.innerHTML =
+undecided.map(
+x => `
+
+<div class="undecided-box">
+
+<div class="item">
+
+<input
+type="checkbox"
+
+${x.done ? "checked" : ""}
+
+onclick="
+toggle(
+'schedule',
+${x.id}
+)
+"
+>
+
+<div class="item-content">
+
+<div class="${
+x.done ? "done" : ""
+}">
+
+❓ ${x.text}
+
+</div>
+
+<div class="item-detail">
+
+担当：${x.person}
+
+</div>
+
+</div>
+
+<button
+class="delete"
+onclick="
+deleteSchedule(${x.id})
+">
+
+削除
+
+</button>
+
+</div>
+
+</div>
+
+`
+).join("");
+
+}
+
+
+/* 今後 */
 
 const futureList =
-
 schedules
-
 .filter(
-x => x.date > today
+x =>
+x.date &&
+x.date > today
 )
-
 .sort(
 (a,b) => {
 
 const aDate =
-a.date + " " + a.time;
+a.date + " " + (a.time || "");
 
 const bDate =
-b.date + " " + b.time;
+b.date + " " + (b.time || "");
 
 return aDate.localeCompare(
 bDate
@@ -1432,50 +1453,40 @@ bDate
 
 
 const futureArea =
-
 document.getElementById(
 "futureSchedule"
 );
 
 
-if (
-futureList.length === 0
-) {
+if (futureList.length === 0) {
 
 futureArea.innerHTML =
-
-'<div class="empty">' +
-'今後の予定はありません' +
-'</div>';
+'<div class="empty">今後の予定はありません</div>';
 
 }
 
 else {
 
-
 let currentDate = "";
 
 
 futureArea.innerHTML =
-
 futureList.map(
 x => {
 
 let title = "";
 
 
-if (
-x.date !== currentDate
-) {
+if (x.date !== currentDate) {
 
-currentDate =
-x.date;
+currentDate = x.date;
 
 title =
-
 `
 <div class="date-title">
+
 📅 ${formatDate(x.date)}
+
 </div>
 `;
 
@@ -1491,10 +1502,7 @@ ${title}
 <input
 type="checkbox"
 
-${x.done
-? "checked"
-: ""
-}
+${x.done ? "checked" : ""}
 
 onclick="
 toggle(
@@ -1504,27 +1512,19 @@ ${x.id}
 "
 >
 
-
 <div class="item-content">
 
 <div class="${
-x.done
-? "done"
-: ""
+x.done ? "done" : ""
 }">
 
-${
-x.time
-? x.time
-: ""
-}
+${x.time || ""}
 
 　
 
 ${x.text}
 
 </div>
-
 
 <div class="item-detail">
 
@@ -1534,27 +1534,21 @@ ${x.text}
 
 </div>
 
-
 <button
 class="delete"
-
 onclick="
-deleteSchedule(
-${x.id}
-)
+deleteSchedule(${x.id})
 ">
 
 削除
 
 </button>
 
-
 </div>
 
 `;
 
 }
-
 ).join("");
 
 }
@@ -1562,30 +1556,22 @@ ${x.id}
 }
 
 
-
-/* ==================================================
+/* =========================
    買い物表示
-================================================== */
+========================= */
 
 function renderShopping() {
 
-
 const area =
-
 document.getElementById(
 "shoppingList"
 );
 
 
-if (
-shopping.length === 0
-) {
+if (shopping.length === 0) {
 
 area.innerHTML =
-
-'<div class="empty">' +
-'買い物はありません' +
-'</div>';
+'<div class="empty">買い物はありません</div>';
 
 return;
 
@@ -1593,7 +1579,6 @@ return;
 
 
 area.innerHTML =
-
 shopping.map(
 x => `
 
@@ -1602,10 +1587,7 @@ x => `
 <input
 type="checkbox"
 
-${x.done
-? "checked"
-: ""
-}
+${x.done ? "checked" : ""}
 
 onclick="
 toggle(
@@ -1615,13 +1597,10 @@ ${x.id}
 "
 >
 
-
 <div class="item-content">
 
 <div class="${
-x.done
-? "done"
-: ""
+x.done ? "done" : ""
 }">
 
 ${x.text}
@@ -1630,20 +1609,15 @@ ${x.text}
 
 </div>
 
-
 <button
 class="delete"
-
 onclick="
-deleteShopping(
-${x.id}
-)
+deleteShopping(${x.id})
 ">
 
 削除
 
 </button>
-
 
 </div>
 
@@ -1653,30 +1627,22 @@ ${x.id}
 }
 
 
-
-/* ==================================================
+/* =========================
    家事表示
-================================================== */
+========================= */
 
 function renderHouse() {
 
-
 const area =
-
 document.getElementById(
 "houseList"
 );
 
 
-if (
-house.length === 0
-) {
+if (house.length === 0) {
 
 area.innerHTML =
-
-'<div class="empty">' +
-'家事はありません' +
-'</div>';
+'<div class="empty">家事はありません</div>';
 
 return;
 
@@ -1684,7 +1650,6 @@ return;
 
 
 area.innerHTML =
-
 house.map(
 x => `
 
@@ -1693,10 +1658,7 @@ x => `
 <input
 type="checkbox"
 
-${x.done
-? "checked"
-: ""
-}
+${x.done ? "checked" : ""}
 
 onclick="
 toggle(
@@ -1706,19 +1668,15 @@ ${x.id}
 "
 >
 
-
 <div class="item-content">
 
 <div class="${
-x.done
-? "done"
-: ""
+x.done ? "done" : ""
 }">
 
 ${x.text}
 
 </div>
-
 
 <div class="item-detail">
 
@@ -1728,20 +1686,15 @@ ${x.text}
 
 </div>
 
-
 <button
 class="delete"
-
 onclick="
-deleteHouse(
-${x.id}
-)
+deleteHouse(${x.id})
 ">
 
 削除
 
 </button>
-
 
 </div>
 
@@ -1751,30 +1704,22 @@ ${x.id}
 }
 
 
-
-/* ==================================================
+/* =========================
    ご飯表示
-================================================== */
+========================= */
 
 function renderMeals() {
 
-
 const area =
-
 document.getElementById(
 "mealList"
 );
 
 
-if (
-meals.length === 0
-) {
+if (meals.length === 0) {
 
 area.innerHTML =
-
-'<div class="empty">' +
-'料理が登録されていません' +
-'</div>';
+'<div class="empty">料理が登録されていません</div>';
 
 return;
 
@@ -1782,15 +1727,12 @@ return;
 
 
 area.innerHTML =
-
 meals.map(
 x => `
 
 <div class="item">
 
-
 <div class="item-content">
-
 
 <div class="item-title">
 
@@ -1798,21 +1740,15 @@ x => `
 
 </div>
 
-
 ${
 x.url
-
 ?
-
 `
-
 <div class="item-detail">
 
 <a
 class="recipe"
-
 href="${x.url}"
-
 target="_blank"
 >
 
@@ -1821,32 +1757,22 @@ target="_blank"
 </a>
 
 </div>
-
 `
-
 :
-
 ""
-
 }
-
 
 </div>
 
-
 <button
 class="delete"
-
 onclick="
-deleteMeal(
-${x.id}
-)
+deleteMeal(${x.id})
 ">
 
 削除
 
 </button>
-
 
 </div>
 
@@ -1856,13 +1782,11 @@ ${x.id}
 }
 
 
-
-/* ==================================================
-   全体表示
-================================================== */
+/* =========================
+   全体
+========================= */
 
 function render() {
-
 
 renderSchedules();
 
@@ -1872,8 +1796,6 @@ renderHouse();
 
 renderMeals();
 
-
-/* 今日の予定 */
 
 const today =
 getToday();
@@ -1891,8 +1813,6 @@ x.date === today
 ).length;
 
 
-/* 買い物 */
-
 document.getElementById(
 "shoppingCount"
 ).textContent =
@@ -1901,8 +1821,6 @@ shopping.filter(
 x => !x.done
 ).length;
 
-
-/* 家事 */
 
 document.getElementById(
 "houseCount"
@@ -1915,61 +1833,15 @@ x => !x.done
 }
 
 
-
-
-/* ==================================================
-   初期表示
-================================================== */
-
-function setDefaultDateTime() {
-
-    const now = new Date();
-
-    const year =
-        now.getFullYear();
-
-    const month =
-        String(
-            now.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
-        String(
-            now.getDate()
-        ).padStart(2, "0");
-
-    const hours =
-        String(
-            now.getHours()
-        ).padStart(2, "0");
-
-    const minutes =
-        String(
-            now.getMinutes()
-        ).padStart(2, "0");
-
-
-    document.getElementById(
-        "scheduleDate"
-    ).value =
-        `${year}-${month}-${day}`;
-
-
-    document.getElementById(
-        "scheduleTime"
-    ).value =
-        `${hours}:${minutes}`;
-
-}
-
+/* =========================
+   起動
+========================= */
 
 setDefaultDateTime();
 
 render();
 
-
 </script>
-
 
 </body>
 

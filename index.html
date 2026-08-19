@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>わが家の家事・育児</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        /* =========================
-           基本設定
-        ========================= */
 
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
         * {
             box-sizing: border-box;
         }
@@ -61,10 +60,6 @@
             font-size: 19px;
         }
 
-        /* =========================
-           入力・ボタン
-        ========================= */
-
         input,
         select,
         textarea {
@@ -108,10 +103,6 @@
             margin-bottom: 8px;
         }
 
-        /* =========================
-           リスト
-        ========================= */
-
         .item {
             display: flex;
             align-items: center;
@@ -149,10 +140,6 @@
             color: #999;
         }
 
-        /* =========================
-           予定
-        ========================= */
-
         .today {
             background: #fff8df;
             border-left: 5px solid #e5b700;
@@ -176,10 +163,6 @@
             font-size: 16px;
         }
 
-        /* =========================
-           今日の状況
-        ========================= */
-
         .summary {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -198,10 +181,6 @@
             font-weight: bold;
         }
 
-        /* =========================
-           買い物
-        ========================= */
-
         .quick-shopping {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -212,10 +191,6 @@
         .quick-shopping button {
             background: #f1f2f5;
         }
-
-        /* =========================
-           家族メモ
-        ========================= */
 
         .family-memo {
             background: #fffdf0;
@@ -229,10 +204,6 @@
             white-space: pre-wrap;
             word-break: break-word;
         }
-
-        /* =========================
-           その他
-        ========================= */
 
         .empty {
             color: #999;
@@ -259,10 +230,6 @@
             font-weight: bold;
         }
 
-        /* =========================
-           スマホ表示
-        ========================= */
-
         @media (max-width: 500px) {
             .container {
                 padding: 10px;
@@ -270,10 +237,6 @@
 
             .card {
                 padding: 15px;
-            }
-
-            .summary {
-                grid-template-columns: repeat(3, 1fr);
             }
 
             .quick-shopping {
@@ -289,359 +252,522 @@
 
 <body>
 
-    <!-- =========================
-         ヘッダー
-    ========================= -->
+<header>
+    <h1>🏠 わが家の家事・育児</h1>
+    <p>家族で予定・家事・買い物・ご飯を共有</p>
+</header>
 
-    <header>
-        <h1>🏠 わが家の家事・育児</h1>
-        <p>家族で予定・家事・買い物・ご飯を共有</p>
-    </header>
+<div class="container">
 
-    <div class="container">
+    <!-- 今日の状況 -->
+    <div class="card">
+        <h2>📊 今日の状況</h2>
 
-        <!-- =========================
-             今日の状況
-        ========================= -->
-
-        <div class="card">
-            <h2>📊 今日の状況</h2>
-
-            <div class="summary">
-                <div class="summary-box">
-                    <div class="summary-number" id="todayCount">0</div>
-                    <div>今日の予定</div>
-                </div>
-
-                <div class="summary-box">
-                    <div class="summary-number" id="shoppingCount">0</div>
-                    <div>買い物</div>
-                </div>
-
-                <div class="summary-box">
-                    <div class="summary-number" id="houseCount">0</div>
-                    <div>家事</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- =========================
-             今日の予定
-        ========================= -->
-
-        <div class="card">
-            <h2>⭐ 今日の予定</h2>
-            <div id="todaySchedule"></div>
-        </div>
-
-        <!-- =========================
-             予定登録
-        ========================= -->
-
-        <div class="card">
-            <h2>📅 予定を登録</h2>
-
-            <label for="scheduleDate">日付</label>
-            <input type="date" id="scheduleDate">
-
-            <label for="scheduleTime">時刻</label>
-            <input type="time" id="scheduleTime">
-
-            <button class="undecided" onclick="toggleUndecided()">❓ 日時未定</button>
-
-            <div id="dateTimeMessage" style="font-size:13px;color:#777;margin-bottom:10px;">
-                日時を指定して登録できます
+        <div class="summary">
+            <div class="summary-box">
+                <div class="summary-number" id="todayCount">0</div>
+                <div>今日の予定</div>
             </div>
 
-            <label for="scheduleText">予定内容</label>
-            <input type="text" id="scheduleText" placeholder="例：保育園お迎え">
-
-            <label for="schedulePerson">担当</label>
-            <select id="schedulePerson">
-                <option>パパ</option>
-                <option>ママ</option>
-                <option>家族</option>
-            </select>
-
-            <button class="add" onclick="addSchedule()">＋ 予定を登録</button>
-        </div>
-
-        <!-- =========================
-             日時未定
-        ========================= -->
-
-        <div class="card">
-            <h2>📌 日時未定</h2>
-            <div id="undecidedSchedule"></div>
-        </div>
-
-        <!-- =========================
-             今後の予定
-        ========================= -->
-
-        <div class="card">
-            <h2>📆 今後の予定</h2>
-            <div id="futureSchedule"></div>
-        </div>
-
-        <!-- =========================
-             買い物
-        ========================= -->
-
-        <div class="card">
-            <h2>🛒 買い物リスト</h2>
-
-            <hr>
-
-            <h3>⚡ よく買うもの</h3>
-
-            <div class="quick-shopping">
-                <button onclick="quickAddShopping('牛乳')">🥛 牛乳</button>
-                <button onclick="quickAddShopping('バナナ')">🍌 バナナ</button>
-                <button onclick="quickAddShopping('ヨーグルト')">🥛 ヨーグルト</button>
+            <div class="summary-box">
+                <div class="summary-number" id="shoppingCount">0</div>
+                <div>買い物</div>
             </div>
 
-            <div id="shoppingList"></div>
-
-            <hr>
-
-            <input id="shoppingText" placeholder="例：牛乳">
-
-            <button class="add" onclick="addShopping()">＋ 買い物を追加</button>
+            <div class="summary-box">
+                <div class="summary-number" id="houseCount">0</div>
+                <div>家事</div>
+            </div>
         </div>
-
-        <!-- =========================
-             家事
-        ========================= -->
-
-        <div class="card">
-            <h2>🧹 家事ルーティン</h2>
-
-            <div id="houseList"></div>
-
-            <hr>
-
-            <input id="houseText" placeholder="例：洗濯">
-
-            <select id="housePerson">
-                <option>パパ</option>
-                <option>ママ</option>
-                <option>家族</option>
-            </select>
-
-            <button class="add" onclick="addHouse()">＋ 家事を追加</button>
-        </div>
-
-        <!-- =========================
-             ご飯
-        ========================= -->
-
-        <div class="card">
-            <h2>🍚 ご飯リスト</h2>
-
-            <div id="mealList"></div>
-
-            <hr>
-
-            <label for="mealText">料理名</label>
-            <input id="mealText" placeholder="例：カレー">
-
-            <label for="mealUrl">参考レシピURL</label>
-            <input id="mealUrl" placeholder="https://...">
-
-            <button class="add" onclick="addMeal()">＋ ご飯を追加</button>
-
-            <hr>
-            <h3>🔎 レシピを検索</h3>
-            <input id="recipeSearch" placeholder="例：鶏むね肉 キャベツ">
-            <button class="add" onclick="searchRecipe()">🔎 Googleで検索</button>
-        </div>
-
-        <!-- =========================
-             家族メモ
-        ========================= -->
-
-        <div class="card">
-            <h2>📝 家族メモ</h2>
-
-            <textarea id="familyMemoText" placeholder="家族で共有したいことを入力してください"></textarea>
-
-            <button class="add" onclick="addFamilyMemo()">＋ メモを追加</button>
-
-            <hr>
-
-            <div id="familyMemoList"></div>
-        </div>
-
     </div>
 
-    <script>
-/* =========================
-   Supabase接続
-========================= */
 
-const SUPABASE_URL = "https://ourzkhabaeudlxnatwxu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_93W3NgEj1WXET4QGIPnErA_vsKT4G1_";
+    <!-- 今日の予定 -->
+    <div class="card">
+        <h2>⭐ 今日の予定</h2>
+        <div id="todaySchedule"></div>
+    </div>
 
-const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-        
-        
-        /* =========================
-           データ
-        ========================= */
 
-        let schedules = JSON.parse(localStorage.getItem("schedules") || "[]");
-        let shopping = JSON.parse(localStorage.getItem("shopping") || "[]");
-        let house = JSON.parse(localStorage.getItem("house") || "[]");
-        let meals = JSON.parse(localStorage.getItem("meals") || "[]");
-        let familyMemos = JSON.parse(localStorage.getItem("familyMemos") || "[]");
+    <!-- 予定登録 -->
+    <div class="card">
+        <h2>📅 予定を登録</h2>
 
-        /* =========================
-           保存
-        ========================= */
+        <label>日付</label>
+        <input type="date" id="scheduleDate">
 
-        function save() {
-            localStorage.setItem("schedules", JSON.stringify(schedules));
-            localStorage.setItem("shopping", JSON.stringify(shopping));
-            localStorage.setItem("house", JSON.stringify(house));
-            localStorage.setItem("meals", JSON.stringify(meals));
-            localStorage.setItem("familyMemos", JSON.stringify(familyMemos));
-        }
+        <label>時刻</label>
+        <input type="time" id="scheduleTime">
 
-        /* =========================
-           今日の日付取得
-        ========================= */
+        <button class="undecided" onclick="toggleUndecided()">
+            ❓ 日時未定
+        </button>
 
-        function getToday() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, "0");
-            const day = String(now.getDate()).padStart(2, "0");
+        <div id="dateTimeMessage"
+             style="font-size:13px;color:#777;margin-bottom:10px;">
+            日時を指定して登録できます
+        </div>
 
-            return `${year}-${month}-${day}`;
-        }
+        <label>予定内容</label>
+        <input type="text" id="scheduleText" placeholder="例：保育園お迎え">
 
-        /* =========================
-           日付表示
-        ========================= */
+        <label>担当</label>
+        <select id="schedulePerson">
+            <option>パパ</option>
+            <option>ママ</option>
+            <option>家族</option>
+        </select>
 
-        function formatDate(date) {
-            const d = new Date(date + "T00:00:00");
-            return `${d.getMonth() + 1}月${d.getDate()}日`;
-        }
+        <button class="add" onclick="addSchedule()">
+            ＋ 予定を登録
+        </button>
+    </div>
 
-        /* =========================
-           日時未定切替
-        ========================= */
 
-        let isUndecided = false;
+    <!-- 日時未定 -->
+    <div class="card">
+        <h2>📌 日時未定</h2>
+        <div id="undecidedSchedule"></div>
+    </div>
 
-        function toggleUndecided() {
-            isUndecided = !isUndecided;
 
-            const date = document.getElementById("scheduleDate");
-            const time = document.getElementById("scheduleTime");
-            const message = document.getElementById("dateTimeMessage");
+    <!-- 今後の予定 -->
+    <div class="card">
+        <h2>📆 今後の予定</h2>
+        <div id="futureSchedule"></div>
+    </div>
 
-            if (isUndecided) {
-                date.disabled = true;
-                time.disabled = true;
-                date.value = "";
-                time.value = "";
-                message.textContent = "❓ 日時未定として登録します";
-            } else {
-                date.disabled = false;
-                time.disabled = false;
-                message.textContent = "日時を指定して登録できます";
-                setDefaultDateTime();
-            }
-        }
 
-        /* =========================
-           デフォルト日時
-        ========================= */
+    <!-- 買い物 -->
+    <div class="card">
+        <h2>🛒 買い物リスト</h2>
 
-        function setDefaultDateTime() {
-            const now = new Date();
+        <hr>
 
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, "0");
-            const day = String(now.getDate()).padStart(2, "0");
-            const hours = String(now.getHours()).padStart(2, "0");
-            const minutes = String(now.getMinutes()).padStart(2, "0");
+        <h3>⚡ よく買うもの</h3>
 
-            document.getElementById("scheduleDate").value = `${year}-${month}-${day}`;
-            document.getElementById("scheduleTime").value = `${hours}:${minutes}`;
-        }
+        <div class="quick-shopping">
+            <button onclick="quickAddShopping('牛乳')">🥛 牛乳</button>
+            <button onclick="quickAddShopping('バナナ')">🍌 バナナ</button>
+            <button onclick="quickAddShopping('ヨーグルト')">🥛 ヨーグルト</button>
+        </div>
 
-        /* =========================
-           予定追加
-        ========================= */
+        <div id="shoppingList"></div>
 
-        function addSchedule() {
-            const date = document.getElementById("scheduleDate").value;
-            const time = document.getElementById("scheduleTime").value;
-            const text = document.getElementById("scheduleText").value.trim();
-            const person = document.getElementById("schedulePerson").value;
+        <hr>
 
-            if (!text) {
-                alert("予定内容を入力してください");
-                return;
-            }
+        <input id="shoppingText" placeholder="例：牛乳">
 
-            if (!isUndecided && !date) {
-                alert("日付を入力するか、「日時未定」を選択してください");
-                return;
-            }
+        <button class="add" onclick="addShopping()">
+            ＋ 買い物を追加
+        </button>
+    </div>
 
-            schedules.push({
-                id: Date.now(),
-                date: isUndecided ? null : date,
-                time: isUndecided ? null : time,
-                text: text,
-                person: person,
-                done: false
-            });
 
-            document.getElementById("scheduleText").value = "";
+    <!-- 家事 -->
+    <div class="card">
+        <h2>🧹 家事ルーティン</h2>
 
-            if (!isUndecided) {
-                setDefaultDateTime();
-            }
+        <div id="houseList"></div>
 
-            save();
-            render();
-        }
+        <hr>
 
-/* =========================
-   Supabaseから買い物取得
-========================= */
+        <input id="houseText" placeholder="例：洗濯">
+
+        <select id="housePerson">
+            <option>パパ</option>
+            <option>ママ</option>
+            <option>家族</option>
+        </select>
+
+        <button class="add" onclick="addHouse()">
+            ＋ 家事を追加
+        </button>
+    </div>
+
+
+    <!-- ご飯 -->
+    <div class="card">
+        <h2>🍚 ご飯リスト</h2>
+
+        <div id="mealList"></div>
+
+        <hr>
+
+        <label>料理名</label>
+        <input id="mealText" placeholder="例：カレー">
+
+        <label>参考レシピURL</label>
+        <input id="mealUrl" placeholder="https://...">
+
+        <button class="add" onclick="addMeal()">
+            ＋ ご飯を追加
+        </button>
+
+        <hr>
+
+        <h3>🔎 レシピを検索</h3>
+
+        <input id="recipeSearch" placeholder="例：鶏むね肉 キャベツ">
+
+        <button class="add" onclick="searchRecipe()">
+            🔎 Googleで検索
+        </button>
+    </div>
+
+
+    <!-- 家族メモ -->
+    <div class="card">
+        <h2>📝 家族メモ</h2>
+
+        <textarea id="familyMemoText"
+                  placeholder="家族で共有したいことを入力してください"></textarea>
+
+        <button class="add" onclick="addFamilyMemo()">
+            ＋ メモを追加
+        </button>
+
+        <hr>
+
+        <div id="familyMemoList"></div>
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   Supabase設定
+===================================================== */
+
+const SUPABASE_URL =
+    "https://ourzkhabaeudlxnatwxu.supabase.co";
+
+/*
+   ↓↓↓ ここだけ自分のPublishable Keyに変更 ↓↓↓
+*/
+
+const SUPABASE_KEY =
+    "sb_publishable_93W3NgEj1WXET4QGIPnErA_vsKT4G1_
+";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   LocalStorageデータ
+===================================================== */
+
+let schedules =
+    JSON.parse(localStorage.getItem("schedules") || "[]");
+
+let shopping = [];
+
+let house =
+    JSON.parse(localStorage.getItem("house") || "[]");
+
+let meals =
+    JSON.parse(localStorage.getItem("meals") || "[]");
+
+let familyMemos =
+    JSON.parse(localStorage.getItem("familyMemos") || "[]");
+
+
+/* =====================================================
+   LocalStorage保存
+===================================================== */
+
+function saveLocal() {
+
+    localStorage.setItem(
+        "schedules",
+        JSON.stringify(schedules)
+    );
+
+    localStorage.setItem(
+        "house",
+        JSON.stringify(house)
+    );
+
+    localStorage.setItem(
+        "meals",
+        JSON.stringify(meals)
+    );
+
+    localStorage.setItem(
+        "familyMemos",
+        JSON.stringify(familyMemos)
+    );
+}
+
+
+/* =====================================================
+   今日の日付
+===================================================== */
+
+function getToday() {
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1).padStart(2, "0");
+
+    const day =
+        String(now.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+/* =====================================================
+   日付表示
+===================================================== */
+
+function formatDate(date) {
+
+    const d =
+        new Date(date + "T00:00:00");
+
+    return `${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+
+/* =====================================================
+   デフォルト日時
+===================================================== */
+
+function setDefaultDateTime() {
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month =
+        String(now.getMonth() + 1).padStart(2, "0");
+
+    const day =
+        String(now.getDate()).padStart(2, "0");
+
+    const hours =
+        String(now.getHours()).padStart(2, "0");
+
+    const minutes =
+        String(now.getMinutes()).padStart(2, "0");
+
+    document.getElementById("scheduleDate").value =
+        `${year}-${month}-${day}`;
+
+    document.getElementById("scheduleTime").value =
+        `${hours}:${minutes}`;
+}
+
+
+/* =====================================================
+   日時未定
+===================================================== */
+
+let isUndecided = false;
+
+function toggleUndecided() {
+
+    isUndecided = !isUndecided;
+
+    const date =
+        document.getElementById("scheduleDate");
+
+    const time =
+        document.getElementById("scheduleTime");
+
+    const message =
+        document.getElementById("dateTimeMessage");
+
+    if (isUndecided) {
+
+        date.disabled = true;
+        time.disabled = true;
+
+        date.value = "";
+        time.value = "";
+
+        message.textContent =
+            "❓ 日時未定として登録します";
+
+    } else {
+
+        date.disabled = false;
+        time.disabled = false;
+
+        message.textContent =
+            "日時を指定して登録できます";
+
+        setDefaultDateTime();
+    }
+}
+
+
+/* =====================================================
+   予定追加
+===================================================== */
+
+function addSchedule() {
+
+    const date =
+        document.getElementById("scheduleDate").value;
+
+    const time =
+        document.getElementById("scheduleTime").value;
+
+    const text =
+        document.getElementById("scheduleText").value.trim();
+
+    const person =
+        document.getElementById("schedulePerson").value;
+
+    if (!text) {
+
+        alert("予定内容を入力してください");
+
+        return;
+    }
+
+    if (!isUndecided && !date) {
+
+        alert(
+            "日付を入力するか、「日時未定」を選択してください"
+        );
+
+        return;
+    }
+
+    schedules.push({
+
+        id: Date.now(),
+
+        date: isUndecided ? null : date,
+
+        time: isUndecided ? null : time,
+
+        text: text,
+
+        person: person,
+
+        done: false
+    });
+
+    document.getElementById("scheduleText").value = "";
+
+    saveLocal();
+
+    render();
+
+}
+
+
+/* =====================================================
+   Supabase：買い物読み込み
+===================================================== */
 
 async function loadShopping() {
-    const { data, error } = await supabase
+
+    const {
+        data,
+        error
+    } = await supabaseClient
         .from("shopping")
         .select("*")
-        .order("id", { ascending: true });
+        .order("id", {
+            ascending: true
+        });
 
     if (error) {
-        console.error("買い物データ取得エラー:", error);
-        alert("買い物データを取得できませんでした");
+
+        console.error(
+            "買い物データ取得エラー:",
+            error
+        );
+
+        alert(
+            "買い物データを取得できませんでした。\n" +
+            "Supabaseの設定を確認してください。"
+        );
+
         return;
     }
 
     shopping = data || [];
+
     renderShopping();
+
     updateSummary();
 }
-/* =========================
-   よく買うもの追加
-========================= */
+
+
+/* =====================================================
+   Supabase：買い物追加
+===================================================== */
+
+async function addShopping() {
+
+    const text =
+        document
+            .getElementById("shoppingText")
+            .value
+            .trim();
+
+    if (!text) {
+
+        alert("買い物を入力してください");
+
+        return;
+    }
+
+    const {
+        error
+    } = await supabaseClient
+        .from("shopping")
+        .insert({
+            text: text,
+            done: false
+        });
+
+    if (error) {
+
+        console.error(
+            "買い物追加エラー:",
+            error
+        );
+
+        alert(
+            "買い物を追加できませんでした。\n" +
+            "SupabaseのRLS設定などを確認してください。"
+        );
+
+        return;
+    }
+
+    document.getElementById("shoppingText").value = "";
+
+    await loadShopping();
+}
+
+
+/* =====================================================
+   よく買うもの
+===================================================== */
 
 async function quickAddShopping(name) {
-    const { error } = await supabase
+
+    const {
+        error
+    } = await supabaseClient
         .from("shopping")
         .insert({
             text: name,
@@ -649,8 +775,16 @@ async function quickAddShopping(name) {
         });
 
     if (error) {
-        console.error("買い物追加エラー:", error);
-        alert("買い物を追加できませんでした");
+
+        console.error(
+            "買い物追加エラー:",
+            error
+        );
+
+        alert(
+            "買い物を追加できませんでした"
+        );
+
         return;
     }
 
@@ -658,16 +792,20 @@ async function quickAddShopping(name) {
 }
 
 
-/* =========================
+/* =====================================================
    買い物完了切替
-========================= */
+===================================================== */
 
 async function toggleShopping(id) {
-    const item = shopping.find(x => x.id === id);
+
+    const item =
+        shopping.find(x => x.id === id);
 
     if (!item) return;
 
-    const { error } = await supabase
+    const {
+        error
+    } = await supabaseClient
         .from("shopping")
         .update({
             done: !item.done
@@ -675,8 +813,16 @@ async function toggleShopping(id) {
         .eq("id", id);
 
     if (error) {
-        console.error("買い物更新エラー:", error);
-        alert("買い物の状態を変更できませんでした");
+
+        console.error(
+            "買い物更新エラー:",
+            error
+        );
+
+        alert(
+            "買い物の状態を変更できませんでした"
+        );
+
         return;
     }
 
@@ -684,21 +830,34 @@ async function toggleShopping(id) {
 }
 
 
-/* =========================
+/* =====================================================
    買い物削除
-========================= */
+===================================================== */
 
 async function deleteShopping(id) {
-    if (!confirm("この商品を削除しますか？")) return;
 
-    const { error } = await supabase
+    if (!confirm(
+        "この商品を削除しますか？"
+    )) return;
+
+    const {
+        error
+    } = await supabaseClient
         .from("shopping")
         .delete()
         .eq("id", id);
 
     if (error) {
-        console.error("買い物削除エラー:", error);
-        alert("買い物を削除できませんでした");
+
+        console.error(
+            "買い物削除エラー:",
+            error
+        );
+
+        alert(
+            "買い物を削除できませんでした"
+        );
+
         return;
     }
 
@@ -706,486 +865,771 @@ async function deleteShopping(id) {
 }
 
 
-/* =========================
+/* =====================================================
    買い物表示
-========================= */
+===================================================== */
 
 function renderShopping() {
-    const area = document.getElementById("shoppingList");
+
+    const area =
+        document.getElementById("shoppingList");
 
     if (shopping.length === 0) {
-        area.innerHTML = '<div class="empty">買い物はありません</div>';
+
+        area.innerHTML =
+            '<div class="empty">買い物はありません</div>';
+
         return;
     }
 
-    area.innerHTML = shopping.map(x => `
-        <div class="item">
-            <input type="checkbox"
-                ${x.done ? "checked" : ""}
-                onclick="toggleShopping(${x.id})">
+    area.innerHTML =
+        shopping.map(x => `
 
-            <div class="item-content">
-                <div class="${x.done ? "done" : ""}">
-                    ${escapeHtml(x.text)}
+            <div class="item">
+
+                <input
+                    type="checkbox"
+                    ${x.done ? "checked" : ""}
+                    onclick="toggleShopping(${x.id})"
+                >
+
+                <div class="item-content">
+
+                    <div class="${x.done ? "done" : ""}">
+                        ${escapeHtml(x.text)}
+                    </div>
+
                 </div>
+
+                <button
+                    class="delete"
+                    onclick="deleteShopping(${x.id})"
+                >
+                    削除
+                </button>
+
             </div>
 
-            <button class="delete" onclick="deleteShopping(${x.id})">削除</button>
-        </div>
-    `).join("");
-} 
-        /* =========================
-           家事追加
-        ========================= */
+        `).join("");
+}
 
-        function addHouse() {
-            const text = document.getElementById("houseText").value.trim();
-            const person = document.getElementById("housePerson").value;
 
-            if (!text) return;
-
-            house.push({
-                id: Date.now(),
-                text: text,
-                person: person,
-                done: false
-            });
+/* =====================================================
+   家事追加
+===================================================== */
 
-            document.getElementById("houseText").value = "";
+function addHouse() {
 
-            save();
-            render();
-        }
+    const text =
+        document.getElementById("houseText")
+            .value.trim();
 
-        /* =========================
-           ご飯追加
-        ========================= */
+    const person =
+        document.getElementById("housePerson")
+            .value;
 
-        function addMeal() {
-            const text = document.getElementById("mealText").value.trim();
-            const url = document.getElementById("mealUrl").value.trim();
+    if (!text) return;
 
-            if (!text) {
-                alert("料理名を入力してください");
-                return;
-            }
+    house.push({
 
-            meals.push({
-                id: Date.now(),
-                text: text,
-                url: url
-            });
+        id: Date.now(),
 
-            document.getElementById("mealText").value = "";
-            document.getElementById("mealUrl").value = "";
+        text: text,
 
-            save();
-            render();
-        }
+        person: person,
 
-        /* =========================
-           家族メモ追加
-        ========================= */
+        done: false
+    });
 
-        function addFamilyMemo() {
-            const text = document.getElementById("familyMemoText").value.trim();
+    document.getElementById("houseText").value = "";
 
-            if (!text) {
-                alert("メモを入力してください");
-                return;
-            }
+    saveLocal();
 
-            familyMemos.push({
-                id: Date.now(),
-                text: text
-            });
+    render();
+}
 
-            document.getElementById("familyMemoText").value = "";
 
-            save();
-            render();
-        }
+/* =====================================================
+   家事削除
+===================================================== */
 
-        /* =========================
-           完了切替
-        ========================= */
+function deleteHouse(id) {
 
-        function toggle(type, id) {
-            let list;
+    if (!confirm(
+        "この家事を削除しますか？"
+    )) return;
 
-            if (type === "schedule") list = schedules;
-            if (type === "shopping") list = shopping;
-            if (type === "house") list = house;
+    house =
+        house.filter(x => x.id !== id);
 
-            const item = list.find(x => x.id === id);
+    saveLocal();
 
-            if (item) {
-                item.done = !item.done;
-            }
+    render();
+}
 
-            save();
-            render();
-        }
 
-        /* =========================
-           予定削除
-        ========================= */
+/* =====================================================
+   家事完了
+===================================================== */
 
-        function deleteSchedule(id) {
-            if (!confirm("この予定を削除しますか？")) return;
+function toggleHouse(id) {
 
-            schedules = schedules.filter(x => x.id !== id);
+    const item =
+        house.find(x => x.id === id);
 
-            save();
-            render();
-        }
+    if (!item) return;
 
-        /* =========================
-           買い物削除
-        ========================= */
+    item.done = !item.done;
 
-        function deleteShopping(id) {
-            if (!confirm("この商品を削除しますか？")) return;
+    saveLocal();
 
-            shopping = shopping.filter(x => x.id !== id);
+    render();
+}
 
-            save();
-            render();
-        }
 
-        /* =========================
-           家事削除
-        ========================= */
+/* =====================================================
+   家事表示
+===================================================== */
 
-        function deleteHouse(id) {
-            if (!confirm("この家事を削除しますか？")) return;
-
-            house = house.filter(x => x.id !== id);
+function renderHouse() {
 
-            save();
-            render();
-        }
-
-        /* =========================
-           ご飯削除
-        ========================= */
-
-        function deleteMeal(id) {
-            if (!confirm("この料理を削除しますか？")) return;
-
-            meals = meals.filter(x => x.id !== id);
-
-            save();
-            render();
-        }
-
-        /* =========================
-           家族メモ削除
-        ========================= */
-
-        function deleteFamilyMemo(id) {
-            if (!confirm("このメモを削除しますか？")) return;
-
-            familyMemos = familyMemos.filter(x => x.id !== id);
-
-            save();
-            render();
-        }
-
-        /* =========================
-           予定表示
-        ========================= */
-
-        function renderSchedules() {
-            const today = getToday();
-
-            /* 今日 */
-            const todayList = schedules
-                .filter(x => x.date === today)
-                .sort((a, b) => (a.time || "").localeCompare(b.time || ""));
-
-            const todayArea = document.getElementById("todaySchedule");
-
-            if (todayList.length === 0) {
-                todayArea.innerHTML = '<div class="empty">今日の予定はありません</div>';
-            } else {
-                todayArea.innerHTML = todayList.map(x => `
-                    <div class="today">
-                        <div class="item">
-                            <input type="checkbox" ${x.done ? "checked" : ""}
-                                onclick="toggle('schedule', ${x.id})">
-
-                            <div class="item-content">
-                                <div class="${x.done ? "done" : ""}">
-                                    ${x.time || ""}　${x.text}
-                                </div>
-
-                                <div class="item-detail">
-                                    担当：${x.person}
-                                </div>
-                            </div>
-
-                            <button class="delete" onclick="deleteSchedule(${x.id})">削除</button>
-                        </div>
-                    </div>
-                `).join("");
-            }
-
-            /* 日時未定 */
-            const undecided = schedules.filter(x => !x.date);
-            const undecidedArea = document.getElementById("undecidedSchedule");
-
-            if (undecided.length === 0) {
-                undecidedArea.innerHTML = '<div class="empty">日時未定の予定はありません</div>';
-            } else {
-                undecidedArea.innerHTML = undecided.map(x => `
-                    <div class="undecided-box">
-                        <div class="item">
-                            <input type="checkbox" ${x.done ? "checked" : ""}
-                                onclick="toggle('schedule', ${x.id})">
-
-                            <div class="item-content">
-                                <div class="${x.done ? "done" : ""}">
-                                    ❓ ${x.text}
-                                </div>
-
-                                <div class="item-detail">
-                                    担当：${x.person}
-                                </div>
-                            </div>
-
-                            <button class="delete" onclick="deleteSchedule(${x.id})">削除</button>
-                        </div>
-                    </div>
-                `).join("");
-            }
-
-            /* 今後 */
-            const futureList = schedules
-                .filter(x => x.date && x.date > today)
-                .sort((a, b) => {
-                    const aDate = a.date + " " + (a.time || "");
-                    const bDate = b.date + " " + (b.time || "");
-                    return aDate.localeCompare(bDate);
-                });
-
-            const futureArea = document.getElementById("futureSchedule");
-
-            if (futureList.length === 0) {
-                futureArea.innerHTML = '<div class="empty">今後の予定はありません</div>';
-            } else {
-                let currentDate = "";
-
-                futureArea.innerHTML = futureList.map(x => {
-                    let title = "";
-
-                    if (x.date !== currentDate) {
-                        currentDate = x.date;
-                        title = `<div class="date-title">📅 ${formatDate(x.date)}</div>`;
-                    }
-
-                    return `
-                        ${title}
-
-                        <div class="item">
-                            <input type="checkbox" ${x.done ? "checked" : ""}
-                                onclick="toggle('schedule', ${x.id})">
-
-                            <div class="item-content">
-                                <div class="${x.done ? "done" : ""}">
-                                    ${x.time || ""}　${x.text}
-                                </div>
-
-                                <div class="item-detail">
-                                    担当：${x.person}
-                                </div>
-                            </div>
-
-                            <button class="delete" onclick="deleteSchedule(${x.id})">削除</button>
-                        </div>
-                    `;
-                }).join("");
-            }
-        }
-
-        /* =========================
-           買い物表示
-        ========================= */
-
-        function renderShopping() {
-            const area = document.getElementById("shoppingList");
-
-            if (shopping.length === 0) {
-                area.innerHTML = '<div class="empty">買い物はありません</div>';
-                return;
-            }
-
-            area.innerHTML = shopping.map(x => `
-                <div class="item">
-                    <input type="checkbox" ${x.done ? "checked" : ""}
-                        onclick="toggle('shopping', ${x.id})">
-
-                    <div class="item-content">
-                        <div class="${x.done ? "done" : ""}">
-                            ${x.text}
-                        </div>
+    const area =
+        document.getElementById("houseList");
+
+    if (house.length === 0) {
+
+        area.innerHTML =
+            '<div class="empty">家事はありません</div>';
+
+        return;
+    }
+
+    area.innerHTML =
+        house.map(x => `
+
+            <div class="item">
+
+                <input
+                    type="checkbox"
+                    ${x.done ? "checked" : ""}
+                    onclick="toggleHouse(${x.id})"
+                >
+
+                <div class="item-content">
+
+                    <div class="${x.done ? "done" : ""}">
+                        ${escapeHtml(x.text)}
                     </div>
 
-                    <button class="delete" onclick="deleteShopping(${x.id})">削除</button>
+                    <div class="item-detail">
+                        担当：${escapeHtml(x.person)}
+                    </div>
+
                 </div>
-            `).join("");
-        }
 
-        /* =========================
-           家事表示
-        ========================= */
+                <button
+                    class="delete"
+                    onclick="deleteHouse(${x.id})"
+                >
+                    削除
+                </button>
 
-        function renderHouse() {
-            const area = document.getElementById("houseList");
+            </div>
 
-            if (house.length === 0) {
-                area.innerHTML = '<div class="empty">家事はありません</div>';
-                return;
-            }
+        `).join("");
+}
 
-            area.innerHTML = house.map(x => `
+
+/* =====================================================
+   ご飯追加
+===================================================== */
+
+function addMeal() {
+
+    const text =
+        document.getElementById("mealText")
+            .value.trim();
+
+    const url =
+        document.getElementById("mealUrl")
+            .value.trim();
+
+    if (!text) {
+
+        alert("料理名を入力してください");
+
+        return;
+    }
+
+    meals.push({
+
+        id: Date.now(),
+
+        text: text,
+
+        url: url
+    });
+
+    document.getElementById("mealText").value = "";
+
+    document.getElementById("mealUrl").value = "";
+
+    saveLocal();
+
+    render();
+}
+
+
+/* =====================================================
+   ご飯削除
+===================================================== */
+
+function deleteMeal(id) {
+
+    if (!confirm(
+        "この料理を削除しますか？"
+    )) return;
+
+    meals =
+        meals.filter(x => x.id !== id);
+
+    saveLocal();
+
+    render();
+}
+
+
+/* =====================================================
+   ご飯表示
+===================================================== */
+
+function renderMeals() {
+
+    const area =
+        document.getElementById("mealList");
+
+    if (meals.length === 0) {
+
+        area.innerHTML =
+            '<div class="empty">料理が登録されていません</div>';
+
+        return;
+    }
+
+    area.innerHTML =
+        meals.map(x => `
+
+            <div class="item">
+
+                <div class="item-content">
+
+                    <div class="item-title">
+                        🍚 ${escapeHtml(x.text)}
+                    </div>
+
+                    ${x.url ? `
+
+                        <div class="item-detail">
+
+                            <a
+                                class="recipe"
+                                href="${escapeHtml(x.url)}"
+                                target="_blank"
+                            >
+                                🔗 参考レシピを見る
+                            </a>
+
+                        </div>
+
+                    ` : ""}
+
+                </div>
+
+                <button
+                    class="delete"
+                    onclick="deleteMeal(${x.id})"
+                >
+                    削除
+                </button>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* =====================================================
+   家族メモ追加
+===================================================== */
+
+function addFamilyMemo() {
+
+    const text =
+        document
+            .getElementById("familyMemoText")
+            .value
+            .trim();
+
+    if (!text) {
+
+        alert("メモを入力してください");
+
+        return;
+    }
+
+    familyMemos.push({
+
+        id: Date.now(),
+
+        text: text
+    });
+
+    document.getElementById(
+        "familyMemoText"
+    ).value = "";
+
+    saveLocal();
+
+    render();
+}
+
+
+/* =====================================================
+   家族メモ削除
+===================================================== */
+
+function deleteFamilyMemo(id) {
+
+    if (!confirm(
+        "このメモを削除しますか？"
+    )) return;
+
+    familyMemos =
+        familyMemos.filter(
+            x => x.id !== id
+        );
+
+    saveLocal();
+
+    render();
+}
+
+
+/* =====================================================
+   家族メモ表示
+===================================================== */
+
+function renderFamilyMemos() {
+
+    const area =
+        document.getElementById(
+            "familyMemoList"
+        );
+
+    if (familyMemos.length === 0) {
+
+        area.innerHTML =
+            '<div class="empty">家族メモはありません</div>';
+
+        return;
+    }
+
+    area.innerHTML =
+        familyMemos.map(x => `
+
+            <div class="family-memo">
+
                 <div class="item">
-                    <input type="checkbox" ${x.done ? "checked" : ""}
-                        onclick="toggle('house', ${x.id})">
 
                     <div class="item-content">
+
+                        <div class="memo-text">
+                            ${escapeHtml(x.text)}
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="delete"
+                        onclick="deleteFamilyMemo(${x.id})"
+                    >
+                        削除
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+}
+
+
+/* =====================================================
+   予定完了
+===================================================== */
+
+function toggleSchedule(id) {
+
+    const item =
+        schedules.find(x => x.id === id);
+
+    if (!item) return;
+
+    item.done = !item.done;
+
+    saveLocal();
+
+    render();
+}
+
+
+/* =====================================================
+   予定削除
+===================================================== */
+
+function deleteSchedule(id) {
+
+    if (!confirm(
+        "この予定を削除しますか？"
+    )) return;
+
+    schedules =
+        schedules.filter(
+            x => x.id !== id
+        );
+
+    saveLocal();
+
+    render();
+}
+
+
+/* =====================================================
+   予定表示
+===================================================== */
+
+function renderSchedules() {
+
+    const today = getToday();
+
+    const todayList =
+        schedules
+            .filter(x => x.date === today)
+            .sort((a, b) =>
+                (a.time || "")
+                    .localeCompare(
+                        b.time || ""
+                    )
+            );
+
+    const todayArea =
+        document.getElementById(
+            "todaySchedule"
+        );
+
+    if (todayList.length === 0) {
+
+        todayArea.innerHTML =
+            '<div class="empty">今日の予定はありません</div>';
+
+    } else {
+
+        todayArea.innerHTML =
+            todayList.map(x => `
+
+                <div class="today">
+
+                    <div class="item">
+
+                        <input
+                            type="checkbox"
+                            ${x.done ? "checked" : ""}
+                            onclick="toggleSchedule(${x.id})"
+                        >
+
+                        <div class="item-content">
+
+                            <div class="${x.done ? "done" : ""}">
+                                ${escapeHtml(x.time || "")}
+                               　
+                                ${escapeHtml(x.text)}
+                            </div>
+
+                            <div class="item-detail">
+                                担当：
+                                ${escapeHtml(x.person)}
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="delete"
+                            onclick="deleteSchedule(${x.id})"
+                        >
+                            削除
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `).join("");
+    }
+
+
+    /* 日時未定 */
+
+    const undecided =
+        schedules.filter(x => !x.date);
+
+    const undecidedArea =
+        document.getElementById(
+            "undecidedSchedule"
+        );
+
+    if (undecided.length === 0) {
+
+        undecidedArea.innerHTML =
+            '<div class="empty">日時未定の予定はありません</div>';
+
+    } else {
+
+        undecidedArea.innerHTML =
+            undecided.map(x => `
+
+                <div class="undecided-box">
+
+                    <div class="item">
+
+                        <input
+                            type="checkbox"
+                            ${x.done ? "checked" : ""}
+                            onclick="toggleSchedule(${x.id})"
+                        >
+
+                        <div class="item-content">
+
+                            <div class="${x.done ? "done" : ""}">
+                                ❓ ${escapeHtml(x.text)}
+                            </div>
+
+                            <div class="item-detail">
+                                担当：
+                                ${escapeHtml(x.person)}
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="delete"
+                            onclick="deleteSchedule(${x.id})"
+                        >
+                            削除
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `).join("");
+    }
+
+
+    /* 今後 */
+
+    const futureList =
+        schedules
+            .filter(
+                x => x.date && x.date > today
+            )
+            .sort((a, b) => {
+
+                const aDate =
+                    a.date + " " + (a.time || "");
+
+                const bDate =
+                    b.date + " " + (b.time || "");
+
+                return aDate.localeCompare(bDate);
+            });
+
+    const futureArea =
+        document.getElementById(
+            "futureSchedule"
+        );
+
+    if (futureList.length === 0) {
+
+        futureArea.innerHTML =
+            '<div class="empty">今後の予定はありません</div>';
+
+        return;
+    }
+
+    let currentDate = "";
+
+    futureArea.innerHTML =
+        futureList.map(x => {
+
+            let title = "";
+
+            if (x.date !== currentDate) {
+
+                currentDate = x.date;
+
+                title =
+                    `<div class="date-title">
+                        📅 ${formatDate(x.date)}
+                    </div>`;
+            }
+
+            return `
+
+                ${title}
+
+                <div class="item">
+
+                    <input
+                        type="checkbox"
+                        ${x.done ? "checked" : ""}
+                        onclick="toggleSchedule(${x.id})"
+                    >
+
+                    <div class="item-content">
+
                         <div class="${x.done ? "done" : ""}">
-                            ${x.text}
+                            ${escapeHtml(x.time || "")}
+                            　
+                            ${escapeHtml(x.text)}
                         </div>
 
                         <div class="item-detail">
-                            担当：${x.person}
-                        </div>
-                    </div>
-
-                    <button class="delete" onclick="deleteHouse(${x.id})">削除</button>
-                </div>
-            `).join("");
-        }
-
-        /* =========================
-           ご飯表示
-        ========================= */
-
-        function renderMeals() {
-            const area = document.getElementById("mealList");
-
-            if (meals.length === 0) {
-                area.innerHTML = '<div class="empty">料理が登録されていません</div>';
-                return;
-            }
-
-            area.innerHTML = meals.map(x => `
-                <div class="item">
-                    <div class="item-content">
-                        <div class="item-title">🍚 ${x.text}</div>
-
-                        ${x.url ? `
-                            <div class="item-detail">
-                                <a class="recipe" href="${x.url}" target="_blank">
-                                    🔗 参考レシピを見る
-                                </a>
-                            </div>
-                        ` : ""}
-                    </div>
-
-                    <button class="delete" onclick="deleteMeal(${x.id})">削除</button>
-                </div>
-            `).join("");
-        }
-
-        /* =========================
-           家族メモ表示
-        ========================= */
-
-        function renderFamilyMemos() {
-            const area = document.getElementById("familyMemoList");
-
-            if (familyMemos.length === 0) {
-                area.innerHTML = '<div class="empty">家族メモはありません</div>';
-                return;
-            }
-
-            area.innerHTML = familyMemos.map(x => `
-                <div class="family-memo">
-                    <div class="item">
-                        <div class="item-content">
-                            <div class="memo-text">${escapeHtml(x.text)}</div>
+                            担当：
+                            ${escapeHtml(x.person)}
                         </div>
 
-                        <button class="delete" onclick="deleteFamilyMemo(${x.id})">
-                            削除
-                        </button>
                     </div>
+
+                    <button
+                        class="delete"
+                        onclick="deleteSchedule(${x.id})"
+                    >
+                        削除
+                    </button>
+
                 </div>
-            `).join("");
-        }
+            `;
+        }).join("");
+}
 
-        /* =========================
-           HTML特殊文字対策
-        ========================= */
 
-        function escapeHtml(text) {
-            const div = document.createElement("div");
-            div.textContent = text;
-            return div.innerHTML;
-        }
+/* =====================================================
+   HTML特殊文字対策
+===================================================== */
 
-        /* =========================
-           Googleレシピ検索
-        ========================= */
+function escapeHtml(text) {
 
-        function searchRecipe() {
-            const keyword = document.getElementById("recipeSearch").value.trim();
+    const div =
+        document.createElement("div");
 
-            if (!keyword) {
-                alert("材料名を入力してください");
-                return;
-            }
+    div.textContent =
+        text == null ? "" : String(text);
 
-            const url = "https://www.google.com/search?q=" +
-                encodeURIComponent(keyword + " レシピ");
+    return div.innerHTML;
+}
 
-            window.open(url, "_blank");
-        }
 
-        /* =========================
-           全体表示
-        ========================= */
+/* =====================================================
+   レシピ検索
+===================================================== */
 
-        function render() {
-            renderSchedules();
-            renderShopping();
-            renderHouse();
-            renderMeals();
-            renderFamilyMemos();
+function searchRecipe() {
 
-            const today = getToday();
+    const keyword =
+        document
+            .getElementById("recipeSearch")
+            .value
+            .trim();
 
-            document.getElementById("todayCount").textContent =
-                schedules.filter(x => x.date === today && !x.done).length;
+    if (!keyword) {
 
-            document.getElementById("shoppingCount").textContent =
-                shopping.filter(x => !x.done).length;
+        alert("材料名を入力してください");
 
-            document.getElementById("houseCount").textContent =
-                house.filter(x => !x.done).length;
-        }
+        return;
+    }
 
-        /* =========================
-           起動
-        ========================= */
+    const url =
+        "https://www.google.com/search?q=" +
+        encodeURIComponent(
+            keyword + " レシピ"
+        );
+
+    window.open(url, "_blank");
+}
+
+
+/* =====================================================
+   今日の状況更新
+===================================================== */
+
+function updateSummary() {
+
+    const today = getToday();
+
+    document.getElementById(
+        "todayCount"
+    ).textContent =
+        schedules.filter(
+            x => x.date === today && !x.done
+        ).length;
+
+    document.getElementById(
+        "shoppingCount"
+    ).textContent =
+        shopping.filter(
+            x => !x.done
+        ).length;
+
+    document.getElementById(
+        "houseCount"
+    ).textContent =
+        house.filter(
+            x => !x.done
+        ).length;
+}
+
+
+/* =====================================================
+   全体表示
+===================================================== */
+
+function render() {
+
+    renderSchedules();
+
+    renderShopping();
+
+    renderHouse();
+
+    renderMeals();
+
+    renderFamilyMemos();
+
+    updateSummary();
+}
+
+
+/* =====================================================
+   起動
+===================================================== */
 
 setDefaultDateTime();
+
 render();
+
 loadShopping();
-        
-    </script>
+
+</script>
 
 </body>
 </html>

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>わが家の家事・育児</title>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* =========================
            基本設定
@@ -476,6 +476,19 @@
     </div>
 
     <script>
+/* =========================
+   Supabase接続
+========================= */
+
+const SUPABASE_URL = "https://ourzkhabaeudlxnatwxu.supabase.co";
+const SUPABASE_KEY = "ここに先ほどのPublishable Key";
+
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+        
+        
         /* =========================
            データ
         ========================= */
@@ -603,42 +616,154 @@
             render();
         }
 
-        /* =========================
-           買い物追加
-        ========================= */
+/* =========================
+   Supabaseから買い物取得
+========================= */
 
-        function addShopping() {
-            const text = document.getElementById("shoppingText").value.trim();
+async function loadShopping() {
+    const { data, error } = await supabase
+        .from("shopping")
+        .select("*")
+        .order("id", { ascending: true });
 
-            if (!text) return;
+    if (error) {
+        console.error("買い物データ取得エラー:", error);
+        alert("買い物データを取得できませんでした");
+        return;
+    }
 
-            shopping.push({
-                id: Date.now(),
-                text: text,
-                done: false
-            });
+    shopping = data || [];
+    renderShopping();
+    updateSummary();
+}
 
-            document.getElementById("shoppingText").value = "";
 
-            save();
-            render();
-        }
+/* =========================
+   買い物追加
+========================= */
 
-        /* =========================
-           よく買うもの追加
-        ========================= */
+async function addShopping() {
+    const text = document.getElementById("shoppingText").value.trim();
 
-        function quickAddShopping(name) {
-            shopping.push({
-                id: Date.now(),
-                text: name,
-                done: false
-            });
+    if (!text) return;
 
-            save();
-            render();
-        }
+    const { error } = await supabase
+        .from("shopping")
+        .insert({
+            text: text,
+            done: false
+        });
 
+    if (error) {
+        console.error("買い物追加エラー:", error);
+        alert("買い物を追加できませんでした");
+        return;
+    }
+
+    document.getElementById("shoppingText").value = "";
+
+    await loadShopping();
+}
+
+
+/* =========================
+   よく買うもの追加
+========================= */
+
+async function quickAddShopping(name) {
+    const { error } = await supabase
+        .from("shopping")
+        .insert({
+            text: name,
+            done: false
+        });
+
+    if (error) {
+        console.error("買い物追加エラー:", error);
+        alert("買い物を追加できませんでした");
+        return;
+    }
+
+    await loadShopping();
+}
+
+
+/* =========================
+   買い物完了切替
+========================= */
+
+async function toggleShopping(id) {
+    const item = shopping.find(x => x.id === id);
+
+    if (!item) return;
+
+    const { error } = await supabase
+        .from("shopping")
+        .update({
+            done: !item.done
+        })
+        .eq("id", id);
+
+    if (error) {
+        console.error("買い物更新エラー:", error);
+        alert("買い物の状態を変更できませんでした");
+        return;
+    }
+
+    await loadShopping();
+}
+
+
+/* =========================
+   買い物削除
+========================= */
+
+async function deleteShopping(id) {
+    if (!confirm("この商品を削除しますか？")) return;
+
+    const { error } = await supabase
+        .from("shopping")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        console.error("買い物削除エラー:", error);
+        alert("買い物を削除できませんでした");
+        return;
+    }
+
+    await loadShopping();
+}
+
+
+/* =========================
+   買い物表示
+========================= */
+
+function renderShopping() {
+    const area = document.getElementById("shoppingList");
+
+    if (shopping.length === 0) {
+        area.innerHTML = '<div class="empty">買い物はありません</div>';
+        return;
+    }
+
+    area.innerHTML = shopping.map(x => `
+        <div class="item">
+            <input type="checkbox"
+                ${x.done ? "checked" : ""}
+                onclick="toggleShopping(${x.id})">
+
+            <div class="item-content">
+                <div class="${x.done ? "done" : ""}">
+                    ${escapeHtml(x.text)}
+                </div>
+            </div>
+
+            <button class="delete" onclick="deleteShopping(${x.id})">削除</button>
+        </div>
+    `).join("");
+} 
         /* =========================
            家事追加
         ========================= */
@@ -1086,8 +1211,10 @@
            起動
         ========================= */
 
-        setDefaultDateTime();
-        render();
+setDefaultDateTime();
+render();
+loadShopping();
+        
     </script>
 
 </body>

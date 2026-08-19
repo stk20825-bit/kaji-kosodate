@@ -358,16 +358,9 @@ class="undecided"
 onclick="toggleUndecided()">
 
 ❓ 日時未定
-
 </button>
-
-
-<div
-id="dateTimeMessage"
-style="font-size:13px;color:#777;margin-bottom:10px;">
-
+<div id="dateTimeMessage" style="font-size:13px;color:#777;margin-bottom:10px;">
 日時を指定して登録できます
-
 </div>
 
 
@@ -571,11 +564,17 @@ placeholder="https://..."
 <button
 class="add"
 onclick="addMeal()">
-
 ＋ ご飯を追加
-
 </button>
 
+<hr>
+<h3>🔎 レシピを検索</h3>
+<div class="input-with-voice">
+    <input id="recipeSearch" placeholder="例：鶏むね肉 キャベツ">
+    <button class="voice" onclick="startVoice('recipeSearch',this)">🎤</button>
+</div>
+<button class="add" onclick="searchRecipe()">🔎 Googleで検索</button>
+    
 </div>
 
 </div>
@@ -1840,6 +1839,15 @@ x => !x.done
 setDefaultDateTime();
 
 render();
+
+function searchRecipe() {
+    const keyword = document.getElementById("recipeSearch").value.trim();
+    if (!keyword) {
+        alert("材料名を入力してください");
+        return;
+    }
+    window.open("https://www.google.com/search?q=" + encodeURIComponent(keyword + " レシピ"), "_blank");
+}
 
 </script>
 

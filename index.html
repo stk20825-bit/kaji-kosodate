@@ -2,762 +2,583 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>わが家の家事・育児</title>
 
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
-
-            background: #f5f6f8;
-            color: #333;
-        }
-
-        header {
-            background: white;
-            padding: 18px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            border-bottom: 1px solid #ddd;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 22px;
-        }
-
-        header p {
-            margin: 5px 0 0;
-            color: #777;
-            font-size: 13px;
-        }
-
-        .container {
-            max-width: 750px;
-            margin: auto;
-            padding: 15px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-
-        .card h2 {
-            margin-top: 0;
-            font-size: 19px;
-        }
-
-        input,
-        select,
-        textarea {
-
-            width: 100%;
-            padding: 11px;
-
-            border: 1px solid #ccc;
-            border-radius: 8px;
-
-            margin-bottom: 8px;
-
-            font-size: 16px;
-            font-family: inherit;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        button {
-
-            border: none;
-            border-radius: 8px;
-
-            padding: 10px 14px;
-
-            cursor: pointer;
-
-            font-size: 15px;
-        }
-
-        .add {
-
-            background: #222;
-            color: white;
-
-            width: 100%;
-        }
-
-        .delete {
-
-            background: #eee;
-            color: #c00;
-        }
-
-        .undecided {
-
-            background: #fff0c2;
-            color: #6b5000;
-
-            width: 100%;
-            margin-bottom: 8px;
-        }
-
-        .item {
-
-            display: flex;
-            align-items: center;
-
-            gap: 10px;
-
-            padding: 12px 0;
-
-            border-bottom: 1px solid #eee;
-        }
-
-        .item:last-child {
-            border-bottom: none;
-        }
-
-        .item input[type="checkbox"] {
-
-            width: 20px;
-            height: 20px;
-
-            margin: 0;
-        }
-
-        .item-content {
-            flex: 1;
-        }
-
-        .item-title {
-            font-weight: bold;
-        }
-
-        .item-detail {
-
-            font-size: 13px;
-            color: #777;
-
-            margin-top: 3px;
-        }
-
-        .done {
-
-            text-decoration: line-through;
-            color: #999;
-        }
-
-        .today {
-
-            background: #fff8df;
-
-            border-left: 5px solid #e5b700;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            margin-bottom: 10px;
-        }
-
-        .undecided-box {
-
-            background: #f4f0ff;
-
-            border-left: 5px solid #8064a2;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            margin-bottom: 10px;
-        }
-
-        .date-title {
-
-            font-weight: bold;
-
-            margin-top: 15px;
-            margin-bottom: 5px;
-
-            font-size: 16px;
-        }
-
-        .summary {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 8px;
-        }
-
-        .summary-box {
-
-            background: #f1f2f5;
-
-            padding: 12px;
-
-            text-align: center;
-
-            border-radius: 10px;
-        }
-
-        .summary-number {
-
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .quick-shopping {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 8px;
-
-            margin-bottom: 15px;
-        }
-
-        .quick-shopping button {
-
-            background: #f1f2f5;
-        }
-
-        .family-memo {
-
-            background: #fffdf0;
-
-            border-left: 5px solid #e5b700;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            margin-bottom: 10px;
-        }
-
-        .memo-text {
-
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .empty {
-
-            color: #999;
-
-            text-align: center;
-
-            padding: 15px;
-        }
-
-        .recipe {
-
-            color: #333;
-
-            text-decoration: none;
-
-            font-size: 14px;
-        }
-
-        hr {
-
-            border: none;
-
-            border-top:
-                1px solid #eee;
-
-            margin: 18px 0;
-        }
-
-        label {
-
-            display: block;
-
-            margin-bottom: 5px;
-
-            font-size: 14px;
-
-            font-weight: bold;
-        }
-
-        .status {
-
-            font-size: 12px;
-
-            color: #777;
-
-            margin-top: 8px;
-        }
-
-        @media (max-width: 500px) {
-
-            .container {
-                padding: 10px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .quick-shopping {
-                grid-template-columns: 1fr;
-            }
-
-            .item {
-                gap: 8px;
-            }
-        }
-
-    </style>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>わが家の家事・育児</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    background: #f5f6f8;
+    color: #333;
+}
+
+header {
+    background: white;
+    padding: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+header p {
+    margin: 5px 0 0;
+    color: #777;
+    font-size: 13px;
+}
+
+.container {
+    max-width: 750px;
+    margin: auto;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 19px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.add {
+    background: #222;
+    color: white;
+    width: 100%;
+}
+
+.delete {
+    background: #eee;
+    color: #c00;
+}
+
+.undecided {
+    background: #fff0c2;
+    color: #6b5000;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+
+.item-content {
+    flex: 1;
+}
+
+.item-title {
+    font-weight: bold;
+}
+
+.item-detail {
+    font-size: 13px;
+    color: #777;
+    margin-top: 3px;
+}
+
+.done {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.today {
+    background: #fff8df;
+    border-left: 5px solid #e5b700;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.undecided-box {
+    background: #f4f0ff;
+    border-left: 5px solid #8064a2;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.date-title {
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.summary-box {
+    background: #f1f2f5;
+    padding: 12px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.summary-number {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.quick-shopping {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.quick-shopping button {
+    background: #f1f2f5;
+}
+
+.family-memo {
+    background: #fffdf0;
+    border-left: 5px solid #e5b700;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.memo-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.empty {
+    color: #999;
+    text-align: center;
+    padding: 15px;
+}
+
+.recipe {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 18px 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status {
+    font-size: 12px;
+    color: #777;
+    margin-top: 8px;
+}
+
+.error {
+    color: #c00;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+@media (max-width: 500px) {
+
+    .container {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .quick-shopping {
+        grid-template-columns: 1fr;
+    }
+
+    .item {
+        gap: 8px;
+    }
+}
+
+</style>
 
 </head>
 
-
 <body>
-
 
 <header>
 
-    <h1>🏠 わが家の家事・育児</h1>
+<h1>🏠 わが家の家事・育児</h1>
 
-    <p>
-        家族で予定・家事・買い物・ご飯を共有
-    </p>
+<p>
+家族で予定・家事・買い物・ご飯を共有
+</p>
 
 </header>
 
-
 <div class="container">
 
-
-<!-- =========================
-     今日の状況
-========================= -->
+<!-- 今日の状況 -->
 
 <div class="card">
 
-    <h2>📊 今日の状況</h2>
+<h2>📊 今日の状況</h2>
 
-    <div class="summary">
+<div class="summary">
 
-        <div class="summary-box">
+<div class="summary-box">
 
-            <div
-                class="summary-number"
-                id="todayCount">
-                0
-            </div>
+<div class="summary-number"
+     id="todayCount">
+0
+</div>
 
-            <div>
-                今日の予定
-            </div>
+<div>
+今日の予定
+</div>
 
-        </div>
+</div>
 
+<div class="summary-box">
 
-        <div class="summary-box">
+<div class="summary-number"
+     id="shoppingCount">
+0
+</div>
 
-            <div
-                class="summary-number"
-                id="shoppingCount">
-                0
-            </div>
+<div>
+買い物
+</div>
 
-            <div>
-                買い物
-            </div>
+</div>
 
-        </div>
+<div class="summary-box">
 
+<div class="summary-number"
+     id="houseCount">
+0
+</div>
 
-        <div class="summary-box">
+<div>
+家事
+</div>
 
-            <div
-                class="summary-number"
-                id="houseCount">
-                0
-            </div>
+</div>
 
-            <div>
-                家事
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 
 
-
-<!-- =========================
-     今日の予定
-========================= -->
+<!-- 今日の予定 -->
 
 <div class="card">
 
-    <h2>⭐ 今日の予定</h2>
+<h2>⭐ 今日の予定</h2>
 
-    <div id="todaySchedule"></div>
+<div id="todaySchedule"></div>
 
 </div>
 
 
-
-<!-- =========================
-     予定登録
-========================= -->
+<!-- 予定登録 -->
 
 <div class="card">
 
-    <h2>📅 予定を登録</h2>
+<h2>📅 予定を登録</h2>
 
+<label>日付</label>
 
-    <label>
-        日付
-    </label>
+<input type="date"
+       id="scheduleDate">
 
-    <input
-        type="date"
-        id="scheduleDate">
+<label>時刻</label>
 
+<input type="time"
+       id="scheduleTime">
 
-    <label>
-        時刻
-    </label>
-
-    <input
-        type="time"
-        id="scheduleTime">
-
-
-    <button
-        class="undecided"
+<button class="undecided"
         onclick="toggleUndecided()">
 
-        ❓ 日時未定
+❓ 日時未定
 
-    </button>
+</button>
 
+<div id="dateTimeMessage"
+     style="
+     font-size:13px;
+     color:#777;
+     margin-bottom:10px;">
 
-    <div
-        id="dateTimeMessage"
-        style="
-        font-size:13px;
-        color:#777;
-        margin-bottom:10px;
-        ">
+日時を指定して登録できます
 
-        日時を指定して登録できます
+</div>
 
-    </div>
+<label>予定内容</label>
 
+<input type="text"
+       id="scheduleText"
+       placeholder="例：保育園お迎え">
 
-    <label>
-        予定内容
-    </label>
+<label>担当</label>
 
-    <input
-        type="text"
-        id="scheduleText"
-        placeholder="例：保育園お迎え">
+<select id="schedulePerson">
 
+<option>パパ</option>
+<option>ママ</option>
+<option>家族</option>
 
-    <label>
-        担当
-    </label>
+</select>
 
-    <select id="schedulePerson">
-
-        <option>パパ</option>
-        <option>ママ</option>
-        <option>家族</option>
-
-    </select>
-
-
-    <button
-        class="add"
+<button class="add"
         onclick="addSchedule()">
 
-        ＋ 予定を登録
+＋ 予定を登録
 
-    </button>
-
-</div>
-
-
-
-<!-- =========================
-     日時未定
-========================= -->
-
-<div class="card">
-
-    <h2>📌 日時未定</h2>
-
-    <div id="undecidedSchedule"></div>
+</button>
 
 </div>
 
 
-
-<!-- =========================
-     今後の予定
-========================= -->
+<!-- 日時未定 -->
 
 <div class="card">
 
-    <h2>📆 今後の予定</h2>
+<h2>📌 日時未定</h2>
 
-    <div id="futureSchedule"></div>
+<div id="undecidedSchedule"></div>
 
 </div>
 
 
-
-<!-- =========================
-     買い物
-========================= -->
+<!-- 今後 -->
 
 <div class="card">
 
-    <h2>🛒 買い物リスト</h2>
+<h2>📆 今後の予定</h2>
+
+<div id="futureSchedule"></div>
+
+</div>
 
 
-    <div class="status">
-        ☁️ Supabaseで保存しています
-    </div>
+<!-- 買い物 -->
 
+<div class="card">
 
-    <hr>
+<h2>🛒 買い物リスト</h2>
 
+<div class="status">
+☁️ Supabaseで保存しています
+</div>
 
-    <h3>
-        ⚡ よく買うもの
-    </h3>
+<hr>
 
+<h3>⚡ よく買うもの</h3>
 
-    <div class="quick-shopping">
+<div class="quick-shopping">
 
-        <button
-            onclick="quickAddShopping('牛乳')">
+<button onclick="quickAddShopping('牛乳')">
+🥛 牛乳
+</button>
 
-            🥛 牛乳
+<button onclick="quickAddShopping('バナナ')">
+🍌 バナナ
+</button>
 
-        </button>
+<button onclick="quickAddShopping('ヨーグルト')">
+🥛 ヨーグルト
+</button>
 
+</div>
 
-        <button
-            onclick="quickAddShopping('バナナ')">
+<div id="shoppingList"></div>
 
-            🍌 バナナ
+<hr>
 
-        </button>
+<input id="shoppingText"
+       placeholder="例：牛乳">
 
-
-        <button
-            onclick="quickAddShopping('ヨーグルト')">
-
-            🥛 ヨーグルト
-
-        </button>
-
-    </div>
-
-
-    <div id="shoppingList"></div>
-
-
-    <hr>
-
-
-    <input
-        id="shoppingText"
-        placeholder="例：牛乳">
-
-
-    <button
-        class="add"
+<button class="add"
         onclick="addShopping()">
 
-        ＋ 買い物を追加
+＋ 買い物を追加
 
-    </button>
+</button>
 
 </div>
 
 
-
-<!-- =========================
-     家事
-========================= -->
+<!-- 家事 -->
 
 <div class="card">
 
-    <h2>🧹 家事ルーティン</h2>
+<h2>🧹 家事ルーティン</h2>
 
-    <div id="houseList"></div>
+<div id="houseList"></div>
 
-    <hr>
+<hr>
 
+<input id="houseText"
+       placeholder="例：洗濯">
 
-    <input
-        id="houseText"
-        placeholder="例：洗濯">
+<select id="housePerson">
 
+<option>パパ</option>
+<option>ママ</option>
+<option>家族</option>
 
-    <select id="housePerson">
+</select>
 
-        <option>パパ</option>
-        <option>ママ</option>
-        <option>家族</option>
-
-    </select>
-
-
-    <button
-        class="add"
+<button class="add"
         onclick="addHouse()">
 
-        ＋ 家事を追加
+＋ 家事を追加
 
-    </button>
+</button>
 
 </div>
 
 
-
-<!-- =========================
-     ご飯
-========================= -->
+<!-- ご飯 -->
 
 <div class="card">
 
-    <h2>🍚 ご飯リスト</h2>
+<h2>🍚 ご飯リスト</h2>
 
-    <div id="mealList"></div>
+<div id="mealList"></div>
 
-    <hr>
+<hr>
 
+<label>料理名</label>
 
-    <label>
-        料理名
-    </label>
+<input id="mealText"
+       placeholder="例：カレー">
 
-    <input
-        id="mealText"
-        placeholder="例：カレー">
+<label>参考レシピURL</label>
 
+<input id="mealUrl"
+       placeholder="https://...">
 
-    <label>
-        参考レシピURL
-    </label>
-
-    <input
-        id="mealUrl"
-        placeholder="https://...">
-
-
-    <button
-        class="add"
+<button class="add"
         onclick="addMeal()">
 
-        ＋ ご飯を追加
+＋ ご飯を追加
 
-    </button>
+</button>
 
+<hr>
 
-    <hr>
+<h3>🔎 レシピを検索</h3>
 
+<input id="recipeSearch"
+       placeholder="例：鶏むね肉 キャベツ">
 
-    <h3>
-        🔎 レシピを検索
-    </h3>
-
-
-    <input
-        id="recipeSearch"
-        placeholder="例：鶏むね肉 キャベツ">
-
-
-    <button
-        class="add"
+<button class="add"
         onclick="searchRecipe()">
 
-        🔎 Googleで検索
+🔎 Googleで検索
 
-    </button>
+</button>
 
 </div>
 
 
-
-<!-- =========================
-     家族メモ
-========================= -->
+<!-- 家族メモ -->
 
 <div class="card">
 
-    <h2>📝 家族メモ</h2>
+<h2>📝 家族メモ</h2>
 
+<textarea id="familyMemoText"
+          placeholder="家族で共有したいことを入力してください"></textarea>
 
-    <textarea
-        id="familyMemoText"
-        placeholder="家族で共有したいことを入力してください">
-    </textarea>
-
-
-    <button
-        class="add"
+<button class="add"
         onclick="addFamilyMemo()">
 
-        ＋ メモを追加
+＋ メモを追加
 
-    </button>
+</button>
 
+<hr>
 
-    <hr>
-
-
-    <div id="familyMemoList"></div>
+<div id="familyMemoList"></div>
 
 </div>
 
-
 </div>
-
 
 
 <script>
-
 
 /* =====================================================
    Supabase設定
@@ -766,14 +587,8 @@
 const SUPABASE_URL =
     "https://ourzkhabaeudlxnatwxu.supabase.co";
 
-
-/*
-   ↓↓↓ここにPublishable Keyを入れる↓↓↓
-*/
-
 const SUPABASE_KEY =
     "sb_publishable_93W3NgEj1WXET4QGIPnErA_vsKT4G1_";
-
 
 const supabaseClient =
     window.supabase.createClient(
@@ -782,70 +597,17 @@ const supabaseClient =
     );
 
 
-
 /* =====================================================
-   localStorageデータ
+   データ
 ===================================================== */
 
-let schedules =
-    JSON.parse(
-        localStorage.getItem("schedules") || "[]"
-    );
-
-
-let house =
-    JSON.parse(
-        localStorage.getItem("house") || "[]"
-    );
-
-
-let meals =
-    JSON.parse(
-        localStorage.getItem("meals") || "[]"
-    );
-
-
-let familyMemos =
-    JSON.parse(
-        localStorage.getItem("familyMemos") || "[]"
-    );
-
-
-/*
-   買い物だけSupabase
-*/
-
+let schedules = [];
 let shopping = [];
+let house = [];
+let meals = [];
+let familyMemos = [];
 
-
-
-/* =====================================================
-   localStorage保存
-===================================================== */
-
-function saveLocalData() {
-
-    localStorage.setItem(
-        "schedules",
-        JSON.stringify(schedules)
-    );
-
-    localStorage.setItem(
-        "house",
-        JSON.stringify(house)
-    );
-
-    localStorage.setItem(
-        "meals",
-        JSON.stringify(meals)
-    );
-
-    localStorage.setItem(
-        "familyMemos",
-        JSON.stringify(familyMemos)
-    );
-}
-
+let isUndecided = false;
 
 
 /* =====================================================
@@ -873,7 +635,6 @@ function getToday() {
 }
 
 
-
 /* =====================================================
    日付表示
 ===================================================== */
@@ -890,7 +651,6 @@ function formatDate(date) {
         ${d.getDate()}日
     `;
 }
-
 
 
 /* =====================================================
@@ -924,12 +684,10 @@ function setDefaultDateTime() {
             now.getMinutes()
         ).padStart(2, "0");
 
-
     document.getElementById(
         "scheduleDate"
     ).value =
         `${year}-${month}-${day}`;
-
 
     document.getElementById(
         "scheduleTime"
@@ -938,37 +696,29 @@ function setDefaultDateTime() {
 }
 
 
-
 /* =====================================================
    日時未定
 ===================================================== */
-
-let isUndecided = false;
-
 
 function toggleUndecided() {
 
     isUndecided =
         !isUndecided;
 
-
     const date =
         document.getElementById(
             "scheduleDate"
         );
-
 
     const time =
         document.getElementById(
             "scheduleTime"
         );
 
-
     const message =
         document.getElementById(
             "dateTimeMessage"
         );
-
 
     if (isUndecided) {
 
@@ -994,30 +744,119 @@ function toggleUndecided() {
 }
 
 
+/* =====================================================
+   全データ読み込み
+===================================================== */
+
+async function loadAllData() {
+
+    try {
+
+        const [
+            scheduleResult,
+            shoppingResult,
+            houseResult,
+            mealResult,
+            memoResult
+        ] = await Promise.all([
+
+            supabaseClient
+                .from("schedules")
+                .select("*")
+                .order("id", { ascending: true }),
+
+            supabaseClient
+                .from("shopping")
+                .select("*")
+                .order("id", { ascending: true }),
+
+            supabaseClient
+                .from("house")
+                .select("*")
+                .order("id", { ascending: true }),
+
+            supabaseClient
+                .from("meals")
+                .select("*")
+                .order("id", { ascending: true }),
+
+            supabaseClient
+                .from("family_memos")
+                .select("*")
+                .order("id", { ascending: true })
+
+        ]);
+
+
+        if (scheduleResult.error)
+            throw scheduleResult.error;
+
+        if (shoppingResult.error)
+            throw shoppingResult.error;
+
+        if (houseResult.error)
+            throw houseResult.error;
+
+        if (mealResult.error)
+            throw mealResult.error;
+
+        if (memoResult.error)
+            throw memoResult.error;
+
+
+        schedules =
+            scheduleResult.data || [];
+
+        shopping =
+            shoppingResult.data || [];
+
+        house =
+            houseResult.data || [];
+
+        meals =
+            mealResult.data || [];
+
+        familyMemos =
+            memoResult.data || [];
+
+
+        render();
+
+    } catch (error) {
+
+        console.error(
+            "DB読み込みエラー:",
+            error
+        );
+
+        alert(
+            "データの読み込みに失敗しました。\n\n" +
+            error.message
+        );
+    }
+}
+
 
 /* =====================================================
    予定追加
 ===================================================== */
 
-function addSchedule() {
+async function addSchedule() {
 
     const date =
         document.getElementById(
             "scheduleDate"
         ).value;
 
-
     const time =
         document.getElementById(
             "scheduleTime"
         ).value;
 
-
     const text =
         document.getElementById(
             "scheduleText"
         ).value.trim();
-
 
     const person =
         document.getElementById(
@@ -1045,26 +884,40 @@ function addSchedule() {
     }
 
 
-    schedules.push({
+    const { error } =
+        await supabaseClient
+            .from("schedules")
+            .insert({
 
-        id: Date.now(),
+                date:
+                    isUndecided
+                        ? null
+                        : date,
 
-        date:
-            isUndecided
-                ? null
-                : date,
+                time:
+                    isUndecided
+                        ? null
+                        : (time || null),
 
-        time:
-            isUndecided
-                ? null
-                : time,
+                text: text,
 
-        text: text,
+                person: person,
 
-        person: person,
+                done: false
+            });
 
-        done: false
-    });
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "予定を追加できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
 
 
     document.getElementById(
@@ -1072,60 +925,98 @@ function addSchedule() {
     ).value = "";
 
 
-    saveLocalData();
+    isUndecided = false;
 
-    render();
+    document.getElementById(
+        "scheduleDate"
+    ).disabled = false;
+
+    document.getElementById(
+        "scheduleTime"
+    ).disabled = false;
+
+    setDefaultDateTime();
+
+
+    await loadAllData();
 }
 
 
-
 /* =====================================================
-   Supabase：買い物読み込み
+   予定完了
 ===================================================== */
 
-async function loadShopping() {
+async function toggleSchedule(id) {
 
-    const {
-        data,
-        error
-    } =
+    const item =
+        schedules.find(
+            x => x.id === id
+        );
+
+    if (!item) return;
+
+
+    const { error } =
         await supabaseClient
-            .from("shopping")
-            .select("*")
-            .order(
-                "id",
-                {
-                    ascending: true
-                }
-            );
+            .from("schedules")
+            .update({
+
+                done: !item.done
+
+            })
+            .eq("id", id);
 
 
     if (error) {
 
-        console.error(
-            "Supabase買い物取得エラー:",
-            error
-        );
-
         alert(
-            "買い物データを取得できませんでした。\n\nSupabaseの設定を確認してください。"
+            "予定を更新できませんでした。\n\n" +
+            error.message
         );
-
-        shopping = [];
-
-        render();
 
         return;
     }
 
 
-    shopping =
-        data || [];
-
-
-    render();
+    await loadAllData();
 }
 
+
+/* =====================================================
+   予定削除
+===================================================== */
+
+async function deleteSchedule(id) {
+
+    if (
+        !confirm(
+            "この予定を削除しますか？"
+        )
+    ) {
+        return;
+    }
+
+
+    const { error } =
+        await supabaseClient
+            .from("schedules")
+            .delete()
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(
+            "予定を削除できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    await loadAllData();
+}
 
 
 /* =====================================================
@@ -1138,7 +1029,6 @@ async function addShopping() {
         document.getElementById(
             "shoppingText"
         );
-
 
     const text =
         input.value.trim();
@@ -1154,9 +1044,7 @@ async function addShopping() {
     }
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("shopping")
             .insert({
@@ -1169,11 +1057,6 @@ async function addShopping() {
 
     if (error) {
 
-        console.error(
-            "買い物追加エラー:",
-            error
-        );
-
         alert(
             "買い物を追加できませんでした。\n\n" +
             error.message
@@ -1185,10 +1068,8 @@ async function addShopping() {
 
     input.value = "";
 
-
-    await loadShopping();
+    await loadAllData();
 }
-
 
 
 /* =====================================================
@@ -1197,9 +1078,7 @@ async function addShopping() {
 
 async function quickAddShopping(name) {
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("shopping")
             .insert({
@@ -1212,11 +1091,6 @@ async function quickAddShopping(name) {
 
     if (error) {
 
-        console.error(
-            "買い物追加エラー:",
-            error
-        );
-
         alert(
             "買い物を追加できませんでした。\n\n" +
             error.message
@@ -1226,9 +1100,8 @@ async function quickAddShopping(name) {
     }
 
 
-    await loadShopping();
+    await loadAllData();
 }
-
 
 
 /* =====================================================
@@ -1242,35 +1115,24 @@ async function toggleShopping(id) {
             x => x.id === id
         );
 
-
     if (!item) return;
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("shopping")
             .update({
 
-                done:
-                    !item.done
+                done: !item.done
+
             })
-            .eq(
-                "id",
-                id
-            );
+            .eq("id", id);
 
 
     if (error) {
 
-        console.error(
-            "買い物更新エラー:",
-            error
-        );
-
         alert(
-            "買い物の状態を変更できませんでした。\n\n" +
+            "買い物を更新できませんでした。\n\n" +
             error.message
         );
 
@@ -1278,9 +1140,8 @@ async function toggleShopping(id) {
     }
 
 
-    await loadShopping();
+    await loadAllData();
 }
-
 
 
 /* =====================================================
@@ -1298,24 +1159,14 @@ async function deleteShopping(id) {
     }
 
 
-    const {
-        error
-    } =
+    const { error } =
         await supabaseClient
             .from("shopping")
             .delete()
-            .eq(
-                "id",
-                id
-            );
+            .eq("id", id);
 
 
     if (error) {
-
-        console.error(
-            "買い物削除エラー:",
-            error
-        );
 
         alert(
             "買い物を削除できませんでした。\n\n" +
@@ -1326,22 +1177,20 @@ async function deleteShopping(id) {
     }
 
 
-    await loadShopping();
+    await loadAllData();
 }
-
 
 
 /* =====================================================
    家事追加
 ===================================================== */
 
-function addHouse() {
+async function addHouse() {
 
     const text =
         document.getElementById(
             "houseText"
         ).value.trim();
-
 
     const person =
         document.getElementById(
@@ -1349,19 +1198,38 @@ function addHouse() {
         ).value;
 
 
-    if (!text) return;
+    if (!text) {
+
+        alert(
+            "家事内容を入力してください"
+        );
+
+        return;
+    }
 
 
-    house.push({
+    const { error } =
+        await supabaseClient
+            .from("house")
+            .insert({
 
-        id: Date.now(),
+                text: text,
 
-        text: text,
+                person: person,
 
-        person: person,
+                done: false
+            });
 
-        done: false
-    });
+
+    if (error) {
+
+        alert(
+            "家事を追加できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
 
 
     document.getElementById(
@@ -1369,24 +1237,97 @@ function addHouse() {
     ).value = "";
 
 
-    saveLocalData();
-
-    render();
+    await loadAllData();
 }
 
+
+/* =====================================================
+   家事完了
+===================================================== */
+
+async function toggleHouse(id) {
+
+    const item =
+        house.find(
+            x => x.id === id
+        );
+
+    if (!item) return;
+
+
+    const { error } =
+        await supabaseClient
+            .from("house")
+            .update({
+
+                done: !item.done
+
+            })
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(
+            "家事を更新できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    await loadAllData();
+}
+
+
+/* =====================================================
+   家事削除
+===================================================== */
+
+async function deleteHouse(id) {
+
+    if (
+        !confirm(
+            "この家事を削除しますか？"
+        )
+    ) {
+        return;
+    }
+
+
+    const { error } =
+        await supabaseClient
+            .from("house")
+            .delete()
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(
+            "家事を削除できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    await loadAllData();
+}
 
 
 /* =====================================================
    ご飯追加
 ===================================================== */
 
-function addMeal() {
+async function addMeal() {
 
     const text =
         document.getElementById(
             "mealText"
         ).value.trim();
-
 
     const url =
         document.getElementById(
@@ -1404,38 +1345,83 @@ function addMeal() {
     }
 
 
-    meals.push({
+    const { error } =
+        await supabaseClient
+            .from("meals")
+            .insert({
 
-        id: Date.now(),
+                text: text,
 
-        text: text,
+                url: url || null
+            });
 
-        url: url
-    });
+
+    if (error) {
+
+        alert(
+            "料理を追加できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
 
 
     document.getElementById(
         "mealText"
     ).value = "";
 
-
     document.getElementById(
         "mealUrl"
     ).value = "";
 
 
-    saveLocalData();
-
-    render();
+    await loadAllData();
 }
 
 
-
 /* =====================================================
-   家族メモ
+   ご飯削除
 ===================================================== */
 
-function addFamilyMemo() {
+async function deleteMeal(id) {
+
+    if (
+        !confirm(
+            "この料理を削除しますか？"
+        )
+    ) {
+        return;
+    }
+
+
+    const { error } =
+        await supabaseClient
+            .from("meals")
+            .delete()
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(
+            "料理を削除できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    await loadAllData();
+}
+
+
+/* =====================================================
+   家族メモ追加
+===================================================== */
+
+async function addFamilyMemo() {
 
     const text =
         document.getElementById(
@@ -1453,12 +1439,24 @@ function addFamilyMemo() {
     }
 
 
-    familyMemos.push({
+    const { error } =
+        await supabaseClient
+            .from("family_memos")
+            .insert({
 
-        id: Date.now(),
+                text: text
+            });
 
-        text: text
-    });
+
+    if (error) {
+
+        alert(
+            "メモを追加できませんでした。\n\n" +
+            error.message
+        );
+
+        return;
+    }
 
 
     document.getElementById(
@@ -1466,154 +1464,15 @@ function addFamilyMemo() {
     ).value = "";
 
 
-    saveLocalData();
-
-    render();
+    await loadAllData();
 }
-
-
-
-/* =====================================================
-   予定完了
-===================================================== */
-
-function toggleSchedule(id) {
-
-    const item =
-        schedules.find(
-            x => x.id === id
-        );
-
-
-    if (!item) return;
-
-
-    item.done =
-        !item.done;
-
-
-    saveLocalData();
-
-    render();
-}
-
-
-
-/* =====================================================
-   家事完了
-===================================================== */
-
-function toggleHouse(id) {
-
-    const item =
-        house.find(
-            x => x.id === id
-        );
-
-
-    if (!item) return;
-
-
-    item.done =
-        !item.done;
-
-
-    saveLocalData();
-
-    render();
-}
-
-
-
-/* =====================================================
-   予定削除
-===================================================== */
-
-function deleteSchedule(id) {
-
-    if (
-        !confirm(
-            "この予定を削除しますか？"
-        )
-    ) {
-        return;
-    }
-
-
-    schedules =
-        schedules.filter(
-            x => x.id !== id
-        );
-
-
-    saveLocalData();
-
-    render();
-}
-
-
-
-/* =====================================================
-   家事削除
-===================================================== */
-
-function deleteHouse(id) {
-
-    if (
-        !confirm(
-            "この家事を削除しますか？"
-        )
-    ) {
-        return;
-    }
-
-
-    house =
-        house.filter(
-            x => x.id !== id
-        );
-
-
-    saveLocalData();
-
-    render();
-}
-
-
-
-/* =====================================================
-   ご飯削除
-===================================================== */
-
-function deleteMeal(id) {
-
-    if (
-        !confirm(
-            "この料理を削除しますか？"
-        )
-    ) {
-        return;
-    }
-
-
-    meals =
-        meals.filter(
-            x => x.id !== id
-        );
-
-
-    saveLocalData();
-
-    render();
-}
-
 
 
 /* =====================================================
    家族メモ削除
 ===================================================== */
 
-function deleteFamilyMemo(id) {
+async function deleteFamilyMemo(id) {
 
     if (
         !confirm(
@@ -1624,17 +1483,26 @@ function deleteFamilyMemo(id) {
     }
 
 
-    familyMemos =
-        familyMemos.filter(
-            x => x.id !== id
+    const { error } =
+        await supabaseClient
+            .from("family_memos")
+            .delete()
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(
+            "メモを削除できませんでした。\n\n" +
+            error.message
         );
 
+        return;
+    }
 
-    saveLocalData();
 
-    render();
+    await loadAllData();
 }
-
 
 
 /* =====================================================
@@ -1709,7 +1577,6 @@ function renderSchedules() {
 
                         </div>
 
-
                         <button
                             class="delete"
                             onclick="deleteSchedule(${x.id})">
@@ -1721,10 +1588,9 @@ function renderSchedules() {
                     </div>
 
                 </div>
-            `
+                `
             ).join("");
     }
-
 
 
     /* 日時未定 */
@@ -1764,7 +1630,6 @@ function renderSchedules() {
                             onclick="toggleSchedule(${x.id})"
                         >
 
-
                         <div class="item-content">
 
                             <div class="${x.done ? "done" : ""}">
@@ -1774,7 +1639,6 @@ function renderSchedules() {
 
                             </div>
 
-
                             <div class="item-detail">
 
                                 担当：
@@ -1783,7 +1647,6 @@ function renderSchedules() {
                             </div>
 
                         </div>
-
 
                         <button
                             class="delete"
@@ -1796,10 +1659,9 @@ function renderSchedules() {
                     </div>
 
                 </div>
-            `
+                `
             ).join("");
     }
-
 
 
     /* 今後 */
@@ -1819,12 +1681,10 @@ function renderSchedules() {
                         " " +
                         (a.time || "");
 
-
                     const bDate =
                         b.date +
                         " " +
                         (b.time || "");
-
 
                     return aDate.localeCompare(
                         bDate
@@ -1859,14 +1719,12 @@ function renderSchedules() {
 
                 let title = "";
 
-
                 if (
                     x.date !== currentDate
                 ) {
 
                     currentDate =
                         x.date;
-
 
                     title =
                         `<div class="date-title">
@@ -1887,7 +1745,6 @@ function renderSchedules() {
                             onclick="toggleSchedule(${x.id})"
                         >
 
-
                         <div class="item-content">
 
                             <div class="${x.done ? "done" : ""}">
@@ -1898,7 +1755,6 @@ function renderSchedules() {
 
                             </div>
 
-
                             <div class="item-detail">
 
                                 担当：
@@ -1907,7 +1763,6 @@ function renderSchedules() {
                             </div>
 
                         </div>
-
 
                         <button
                             class="delete"
@@ -1922,7 +1777,6 @@ function renderSchedules() {
             }
         ).join("");
 }
-
 
 
 /* =====================================================
@@ -1960,7 +1814,6 @@ function renderShopping() {
                     onclick="toggleShopping(${x.id})"
                 >
 
-
                 <div class="item-content">
 
                     <div class="${x.done ? "done" : ""}">
@@ -1971,7 +1824,6 @@ function renderShopping() {
 
                 </div>
 
-
                 <button
                     class="delete"
                     onclick="deleteShopping(${x.id})">
@@ -1981,11 +1833,9 @@ function renderShopping() {
                 </button>
 
             </div>
-
-        `
+            `
         ).join("");
 }
-
 
 
 /* =====================================================
@@ -2023,7 +1873,6 @@ function renderHouse() {
                     onclick="toggleHouse(${x.id})"
                 >
 
-
                 <div class="item-content">
 
                     <div class="${x.done ? "done" : ""}">
@@ -2031,7 +1880,6 @@ function renderHouse() {
                         ${escapeHtml(x.text)}
 
                     </div>
-
 
                     <div class="item-detail">
 
@@ -2042,7 +1890,6 @@ function renderHouse() {
 
                 </div>
 
-
                 <button
                     class="delete"
                     onclick="deleteHouse(${x.id})">
@@ -2052,11 +1899,9 @@ function renderHouse() {
                 </button>
 
             </div>
-
-        `
+            `
         ).join("");
 }
-
 
 
 /* =====================================================
@@ -2097,7 +1942,6 @@ function renderMeals() {
 
                     </div>
 
-
                     ${
                         x.url
                         ?
@@ -2121,7 +1965,6 @@ function renderMeals() {
 
                 </div>
 
-
                 <button
                     class="delete"
                     onclick="deleteMeal(${x.id})">
@@ -2132,10 +1975,9 @@ function renderMeals() {
 
             </div>
 
-        `
+            `
         ).join("");
 }
-
 
 
 /* =====================================================
@@ -2179,7 +2021,6 @@ function renderFamilyMemos() {
 
                     </div>
 
-
                     <button
                         class="delete"
                         onclick="deleteFamilyMemo(${x.id})">
@@ -2192,10 +2033,9 @@ function renderFamilyMemos() {
 
             </div>
 
-        `
+            `
         ).join("");
 }
-
 
 
 /* =====================================================
@@ -2209,14 +2049,11 @@ function escapeHtml(text) {
             "div"
         );
 
-
     div.textContent =
-        text;
-
+        text ?? "";
 
     return div.innerHTML;
 }
-
 
 
 /* =====================================================
@@ -2253,7 +2090,6 @@ function searchRecipe() {
         "_blank"
     );
 }
-
 
 
 /* =====================================================
@@ -2293,7 +2129,6 @@ function updateSummary() {
 }
 
 
-
 /* =====================================================
    全体表示
 ===================================================== */
@@ -2314,20 +2149,15 @@ function render() {
 }
 
 
-
 /* =====================================================
    起動
 ===================================================== */
 
 setDefaultDateTime();
 
-render();
-
-loadShopping();
-
+loadAllData();
 
 </script>
-
 
 </body>
 

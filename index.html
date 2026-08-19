@@ -481,7 +481,7 @@
 ========================= */
 
 const SUPABASE_URL = "https://ourzkhabaeudlxnatwxu.supabase.co";
-const SUPABASE_KEY = "ここに先ほどのPublishable Key";
+const SUPABASE_KEY = "sb_publishable_93W3NgEj1WXET4QGIPnErA_vsKT4G1_";
 
 const supabase = window.supabase.createClient(
     SUPABASE_URL,
@@ -636,36 +636,6 @@ async function loadShopping() {
     renderShopping();
     updateSummary();
 }
-
-
-/* =========================
-   買い物追加
-========================= */
-
-async function addShopping() {
-    const text = document.getElementById("shoppingText").value.trim();
-
-    if (!text) return;
-
-    const { error } = await supabase
-        .from("shopping")
-        .insert({
-            text: text,
-            done: false
-        });
-
-    if (error) {
-        console.error("買い物追加エラー:", error);
-        alert("買い物を追加できませんでした");
-        return;
-    }
-
-    document.getElementById("shoppingText").value = "";
-
-    await loadShopping();
-}
-
-
 /* =========================
    よく買うもの追加
 ========================= */
